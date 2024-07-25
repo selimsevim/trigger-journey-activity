@@ -2,6 +2,5 @@
     "clientId": "your_sfmc_client_id",
     "clientSecret": "your_sfmc_client_secret",
     "authUrl": "https://auth.exacttargetapis.com/v2/token",
-    "journeysUrl": "https://YOUR_SUBDOMAIN.rest.marketingcloudapis.com/interaction/v1/interactions",
-    "logLevel": "info"
+    "journeysUrl": "https://YOUR_SUBDOMAIN.rest.marketingcloudapis.com/interaction/v1/interactions"
 }

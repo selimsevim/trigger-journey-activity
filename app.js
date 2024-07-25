@@ -7,12 +7,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
-app.post('/custom-activity', async (req, res) => {
-    const payload = req.body;
-
-    console.log('Received payload:', payload);
-
+// Endpoint to retrieve journeys
+app.get('/journeys', async (req, res) => {
     try {
         const authResponse = await axios.post(config.authUrl, {
             client_id: config.clientId,
@@ -28,10 +27,9 @@ app.post('/custom-activity', async (req, res) => {
             }
         });
 
-        console.log('List of journeys:', journeysResponse.data);
-        res.json(journeysResponse.data);
+        res.status(200).json(journeysResponse.data);
     } catch (error) {
-        console.error('Error listing journeys:', error);
+        console.error('Error retrieving journeys:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
