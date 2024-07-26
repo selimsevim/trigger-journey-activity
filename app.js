@@ -7,6 +7,7 @@ var errorhandler = require('errorhandler');
 var http        = require('http');
 var path        = require('path');
 
+
 // EXPRESS CONFIGURATION
 var app = express();
 
@@ -16,6 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.get('/', routes.index );
 
 http.createServer(app).listen(
   app.get('port'), function(){
