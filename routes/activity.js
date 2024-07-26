@@ -63,7 +63,7 @@ function retrieveToken() {
  * Function to retrieve journeys
  */
 function fetchJourneys(token) {
-    const journeysUrl = `https://${process.env.restBaseURL}/interaction/v1/interactions/`;
+    const journeysUrl = `${process.env.restBaseURL}/interaction/v1/interactions/`;
 
     return axios.get(journeysUrl, {
         headers: {
