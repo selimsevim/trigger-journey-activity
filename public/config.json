@@ -10,5 +10,59 @@
       "name": "Discount Code",
       "description": "Issue a discount code to contact them to entice them to buy something."
     }
+  },
+  "arguments": {
+    "execute": {
+      "inArguments": [
+        {
+          "discount": 10
+        }
+      ],
+      "outArguments": [],
+      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/execute",
+      "timeout": 10000,
+      "retryCount": 3,
+      "retryDelay": 1000,
+      "concurrentRequests": 5
+    }
+  },
+  "configurationArguments": {
+    "publish": {
+      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/publish"
+    },
+    "validate": {
+      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/validate"
+    },
+    "stop": {
+      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/stop"
+    }
+  },
+  "userInterfaces": {
+    "configurationSupportsReadOnlyMode": true,
+    "configInspector": {
+      "size": "scm-lg",
+      "emptyIframe": true
+    }
+  },
+  "schema": {
+    "arguments": {
+      "execute": {
+        "inArguments": [],
+        "outArguments": [
+          {
+            "discountCode": {
+              "dataType": "Text",
+              "direction": "out",
+              "access": "visible"
+            },
+            "discount": {
+              "dataType": "Number",
+              "direction": "out",
+              "access": "visible"
+            }
+          }
+        ]
+      }
+    }
   }
 }
