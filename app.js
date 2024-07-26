@@ -7,6 +7,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+console.log("test");
+
 app.post('/execute', (req, res) => {
     const { inArguments } = req.body;
     console.log('Received inArguments:', inArguments);
