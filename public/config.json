@@ -11,17 +11,14 @@
     "en-US": {
       "name": "Journey Monitor Activity",
       "description": "Localized Custom Activity Description",
-      "label1": "Localized Step 1",
-      "label2": "Localized Step 2",
-      "label3": "Localized Step 3"
+      "label1": "Selecting Journey"
     }
   },
   "arguments": {
     "execute": {
       "inArguments": [
         {
-          "staticValue": 0,
-          "databoundEmailAddress": "{{Event.EventKey.EmailAddress}}"
+          "ContactKey": "{{Context.ContactKey}}"
         }
       ],
       "outArguments": [
@@ -33,7 +30,7 @@
       "retryCount": 1,
       "retryDelay": 1000,
       "concurrentRequests": 6,
-      "url": "https://example.com/execute",
+      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/execute",
       "securityOptions": {
         "securityType": "securityContext",
         "securityContextKey": "EXTERNAL_KEY"
@@ -42,28 +39,28 @@
   },
   "configurationArguments": {
     "save": {
-      "url": "https://example.com/save",
+      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/save",
       "securityOptions": {
         "securityType": "securityContext",
         "securityContextKey": "EXTERNAL_KEY"
       }
     },
     "publish": {
-      "url": "https://example.com/publish",
+      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/publish",
       "securityOptions": {
         "securityType": "securityContext",
         "securityContextKey": "EXTERNAL_KEY"
       }
     },
     "validate": {
-      "url": "https://example.com/validate",
+      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/validate",
       "securityOptions": {
         "securityType": "securityContext",
         "securityContextKey": "EXTERNAL_KEY"
       }
     },
     "stop": {
-      "url": "https://example.com/stop",
+      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/stop",
       "securityOptions": {
         "securityType": "securityContext",
         "securityContextKey": "EXTERNAL_KEY"
@@ -74,15 +71,6 @@
     {
       "label": "label1",
       "key": "step1"
-    },
-    {
-      "label": "label2",
-      "key": "step2"
-    },
-    {
-      "label": "label3",
-      "key": "step3",
-      "active": false
     }
   ],
   "userInterfaces": {
