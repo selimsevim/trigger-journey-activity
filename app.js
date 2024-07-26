@@ -6,7 +6,7 @@ var bodyParser  = require('body-parser');
 var errorhandler = require('errorhandler');
 var http        = require('http');
 var path        = require('path');
-
+var routes      = require('./routes');
 
 // EXPRESS CONFIGURATION
 var app = express();
@@ -18,6 +18,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/', routes.index );
+app.post('/login', routes.login );
+app.post('/logout', routes.logout );
+
 
 http.createServer(app).listen(
   app.get('port'), function(){
