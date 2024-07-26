@@ -26,7 +26,14 @@
                 "SAMPLE_PARAM": "SAMPLE PARAM DATA FROM CONFIG.JSON"
               }
             ],
-            "outArguments": []
+            "outArguments": [],
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/execute",
+            "verb": "POST",
+            "body": "",
+            "header": "",
+            "format": "json",
+            "useJwt": true,
+            "timeout": 10000
         }
     },
     
