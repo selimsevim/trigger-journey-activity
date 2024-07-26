@@ -42,22 +42,22 @@
         "save":
         {
             "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/save",
-            "verb": "POST",
+            "verb": "POST"
         },
         "publish":
         {
             "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/publish",
-            "verb": "POST",
+            "verb": "POST"
         },
         "stop":
         {
             "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/stop",
-            "verb": "POST",
+            "verb": "POST"
         },
         "validate":
         {
             "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/validate",
-            "verb": "POST",
+            "verb": "POST"
         }
     },
     "userInterfaces":
