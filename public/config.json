@@ -16,5 +16,23 @@
             "description": "<DESC_OF_APP>",
             "step1Label": "Configure Activity"
         }
+    },
+    
+    "userInterfaces":
+    {
+        "configModal": {
+            "height": 700,
+            "width": 1000,
+            "fullscreen": false
+        }
+    },
+    "schema": 
+    {
+        "arguments":{
+            "execute": {
+                "inArguments": [],
+                "outArguments": []
+            }
+        }
     }
 }
