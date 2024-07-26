@@ -3,7 +3,7 @@ const axios = require("axios");
 const util = require('util');
 
 // Global Variables
-const tokenURL = `${process.env.AUTHENTICATION_URL}/v2/token`;
+const tokenURL = `${process.env.authenticationUrl}/v2/token`;
 
 // Log function for demonstration purposes
 function logData(req) {
