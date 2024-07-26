@@ -6,9 +6,6 @@ var bodyParser  = require('body-parser');
 var errorhandler = require('errorhandler');
 var http        = require('http');
 var path        = require('path');
-var request     = require('request');
-var routes      = require('./routes');
-var activity    = require('./routes/activity');
 
 // EXPRESS CONFIGURATION
 var app = express();
@@ -18,21 +15,6 @@ app.set('port', process.env.PORT || 3000);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// Express in Development Mode
-if ('development' == app.get('env')) {
-  app.use(errorhandler());
-}
-
-app.get('/', routes.index );
-app.post('/login', routes.login );
-app.post('/logout', routes.logout );
-
-// Custom Routes for MC
-app.post('/journeybuilder/save/', activity.save );
-app.post('/journeybuilder/validate/', activity.validate );
-app.post('/journeybuilder/publish/', activity.publish );
-app.post('/journeybuilder/execute/', activity.execute );
 
 
 http.createServer(app).listen(
