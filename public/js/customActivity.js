@@ -39,6 +39,7 @@ define(['postmonger'], function (Postmonger) {
         }
         initialLoad(data);
         parseEventSchema();
+        fetchJourneys();
     }
 
     /**
@@ -46,9 +47,14 @@ define(['postmonger'], function (Postmonger) {
      * The config.json will be updated here if there are any updates to be done via Front End UI
      */
     function save() {
+        let selectedJourneys = $('input[name="journey"]:checked').map(function () {
+            return $(this).val();
+        }).get();
+
         payload['arguments'].execute.inArguments = [
             {
-                SAMPLE_PARAM: "SAMPLE PARAM DATA FROM CONFIG.JSON"
+                SAMPLE_PARAM: "SAMPLE PARAM DATA FROM CONFIG.JSON",
+                journeyIds: selectedJourneys
             }
         ];
         payload['metaData'].isConfigured = true;
@@ -66,7 +72,6 @@ define(['postmonger'], function (Postmonger) {
      */
     function initialLoad(data) {
     };
-
 
     /**
      * This function is to pull the relevant information to create the schema of the objects
@@ -105,6 +110,40 @@ define(['postmonger'], function (Postmonger) {
                 }
             }
 
+        });
+    }
+
+    function fetchJourneys() {
+        // Make an AJAX request to your server to fetch the list of journeys
+        $.ajax({
+            url: '/journeys', // Adjust this URL to your backend endpoint
+            type: 'GET',
+            success: function (response) {
+                populateJourneys(response.items);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching journeys:', error);
+            }
+        });
+    }
+
+    function populateJourneys(journeys) {
+        let $checkboxGroup = $('#journey-checkboxes');
+        $checkboxGroup.empty();
+        $checkboxGroup.append('<label>Select Journeys to Monitor:</label>');
+
+        journeys.forEach(function (journey) {
+            $checkboxGroup.append(
+                $('<label>', {
+                    text: journey.name
+                }).prepend(
+                    $('<input>', {
+                        type: 'checkbox',
+                        name: 'journey',
+                        value: journey.id
+                    })
+                )
+            );
         });
     }
 });
