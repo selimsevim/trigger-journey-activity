@@ -39,7 +39,7 @@
     
     "configurationArguments":
     {
-        "applicationExtensionKey": "<APP EXTENSION KEY>",
+        "applicationExtensionKey": "07db1283-a072-48ea-83d1-66332e94b77a",
         "save":
         {
             "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/save",
