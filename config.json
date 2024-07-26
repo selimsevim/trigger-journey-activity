@@ -1,6 +1,51 @@
 {
-    "clientId": "your_sfmc_client_id",
-    "clientSecret": "your_sfmc_client_secret",
-    "authUrl": "https://auth.exacttargetapis.com/v2/token",
-    "journeysUrl": "https://YOUR_SUBDOMAIN.rest.marketingcloudapis.com/interaction/v1/interactions"
+    "workflowApiVersion": "1.1",
+    "metaData": {
+        "icon": "images/sms.png",
+        "category": "message"
+    },
+    "type": "REST",
+    "lang": {
+        "en-US": {
+            "name": "Journey Monitor Activity",
+            "description": "An activity to monitor journey engagements."
+        }
+    },
+    "arguments": {
+        "execute": {
+            "inArguments": [
+                {
+                    "journeyIds": []
+                }
+            ],
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/execute"
+        }
+    },
+    "configurationArguments": {
+        "save": {
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/save"
+        },
+        "publish": {
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/publish"
+        },
+        "validate": {
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/validate"
+        },
+        "stop": {
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/stop"
+        }
+    },
+    "wizardSteps": [
+        { "label": "Step 1", "key": "step1" },
+        { "label": "Step 2", "key": "step2" },
+        { "label": "Step 3", "key": "step3" },
+        { "label": "Step 4", "key": "step4", "active": false }
+    ],
+    "userInterfaces": {
+        "configModal": {
+            "height": 200,
+            "width": 300,
+            "fullscreen": true
+        }
+    }
 }
