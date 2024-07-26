@@ -19,22 +19,7 @@
     },
     "arguments":
     {
-        "execute":
-        {
-            "inArguments": [
-              { 
-                "SAMPLE_PARAM": "SAMPLE PARAM DATA FROM CONFIG.JSON"
-              }
-            ],
-            "outArguments": [],
-            "url": "<HTTPS_URL_OF_APP>/journeybuilder/execute",
-            "verb": "POST",
-            "body": "",
-            "header": "",
-            "format": "json",
-            "useJwt": true,
-            "timeout": 10000
-        }
+
     },
     
     "configurationArguments":
