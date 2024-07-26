@@ -26,20 +26,13 @@
                 "SAMPLE_PARAM": "SAMPLE PARAM DATA FROM CONFIG.JSON"
               }
             ],
-            "outArguments": [],
-            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/execute",
-            "verb": "POST",
-            "body": "",
-            "header": "",
-            "format": "json",
-            "useJwt": true,
-            "timeout": 10000
+            "outArguments": []
         }
     },
     
     "configurationArguments":
     {
-        "applicationExtensionKey": "07db1283-a072-48ea-83d1-66332e94b77a",
+        "applicationExtensionKey": "",
         "save":
         {
             "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/save",
