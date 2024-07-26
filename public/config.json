@@ -17,24 +17,6 @@
             "step1Label": "Configure Activity"
         }
     },
-    "arguments":
-    {
-        "execute":
-        {
-            "inArguments": [
-              { 
-                "SAMPLE_PARAM": "SAMPLE PARAM DATA FROM CONFIG.JSON"
-              }
-            ],
-            "outArguments": [],
-            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/execute",
-            "verb": "POST",
-            "body": "",
-            "header": "",
-            "format": "json",
-            "timeout": 10000
-        }
-    },
     
     "configurationArguments":
     {
