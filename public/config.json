@@ -1,121 +1,68 @@
 {
   "workflowApiVersion": "1.1",
-  "name": "Journey Monitor Activity",
-  "description": "Custom Activity Description",
   "metaData": {
-    "icon": "images/sms.png",
-    "category": "Custom"
+    "icon": "images/icon.svg",
+    "category": "customer"
   },
   "type": "REST",
   "lang": {
     "en-US": {
-      "name": "Journey Monitor Activity",
-      "description": "Localized Custom Activity Description",
-      "label1": "Selecting Journey"
+      "name": "Discount Code",
+      "description": "Issue a discount code to contact them to entice them to buy something."
     }
   },
   "arguments": {
     "execute": {
       "inArguments": [
         {
-          "ContactKey": "{{Context.ContactKey}}"
+          "discount": 10
         }
       ],
-      "outArguments": [
-        {
-          "returnValue": "default"
-        }
-      ],
+      "outArguments": [],
+      "url": "https://your-hostname/modules/discount-code/execute",
       "timeout": 10000,
-      "retryCount": 1,
+      "retryCount": 3,
       "retryDelay": 1000,
-      "concurrentRequests": 6,
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/execute",
-      "securityOptions": {
-        "securityType": "securityContext",
-        "securityContextKey": "EXTERNAL_KEY"
-      }
+      "concurrentRequests": 5
     }
   },
   "configurationArguments": {
-    "save": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/save",
-      "securityOptions": {
-        "securityType": "securityContext",
-        "securityContextKey": "EXTERNAL_KEY"
-      }
-    },
     "publish": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/publish",
-      "securityOptions": {
-        "securityType": "securityContext",
-        "securityContextKey": "EXTERNAL_KEY"
-      }
+      "url": "https://your-hostname/modules/discount-code/publish"
     },
     "validate": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/validate",
-      "securityOptions": {
-        "securityType": "securityContext",
-        "securityContextKey": "EXTERNAL_KEY"
-      }
+      "url": "https://your-hostname/modules/discount-code/validate"
     },
     "stop": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/stop",
-      "securityOptions": {
-        "securityType": "securityContext",
-        "securityContextKey": "EXTERNAL_KEY"
-      }
+      "url": "https://your-hostname/modules/discount-code/stop"
     }
   },
-  "wizardSteps": [
-    {
-      "label": "label1",
-      "key": "step1"
-    }
-  ],
   "userInterfaces": {
-    "configModal": {
-      "fullscreen": true,
-      "url": "configModal.html"
-    },
-    "runningModal": {
-      "url": "runningModal.html"
-    },
-    "runningHover": {
-      "url": "runningHover.html"
+    "configurationSupportsReadOnlyMode": true,
+    "configInspector": {
+      "size": "scm-lg",
+      "emptyIframe": true
     }
   },
   "schema": {
     "arguments": {
       "execute": {
-        "inArguments": [
-          {
-            "staticValue": {
-              "dataType": "Number",
-              "isNullable": false,
-              "direction": "in"
-            },
-            "databoundEmailAddress": {
-              "dataType": "Email",
-              "isNullable": false,
-              "direction": "in"
-            }
-          }
-        ],
+        "inArguments": [],
         "outArguments": [
           {
-            "returnValue": {
+            "discountCode": {
               "dataType": "Text",
-              "isNullable": false,
-              "direction": "out"
+              "direction": "out",
+              "access": "visible"
+            },
+            "discount": {
+              "dataType": "Number",
+              "direction": "out",
+              "access": "visible"
             }
           }
         ]
       }
     }
-  },
-  "copySettings": {
-    "allowCopy": true,
-    "ignoreArguments": ["eventDefinitionKey"]
   }
 }
