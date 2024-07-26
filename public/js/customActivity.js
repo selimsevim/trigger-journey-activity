@@ -16,15 +16,21 @@ define(['postmonger'], function(Postmonger) {
 
         $.get('/journeys', function(data) {
             var journeys = data.items || [];
-            var $select = $('#journey-select');
-            $select.empty();
+            var $checkboxGroup = $('#journey-checkboxes');
+            $checkboxGroup.empty();
+            $checkboxGroup.append('<label>Select Journeys to Monitor:</label>');
 
             journeys.forEach(function(journey) {
-                $select.append(
-                    $('<option>', {
-                        value: journey.id,
+                $checkboxGroup.append(
+                    $('<label>', {
                         text: journey.name
-                    })
+                    }).prepend(
+                        $('<input>', {
+                            type: 'checkbox',
+                            name: 'journey',
+                            value: journey.id
+                        })
+                    )
                 );
             });
         });
@@ -37,10 +43,13 @@ define(['postmonger'], function(Postmonger) {
     }
 
     function onClickedNext() {
-        var selectedJourney = $('#journey-select').val();
+        var selectedJourneys = $('input[name="journey"]:checked').map(function() {
+            return $(this).val();
+        }).get();
+
         payload.arguments = payload.arguments || {};
         payload.arguments.execute = payload.arguments.execute || {};
-        payload.arguments.execute.inArguments = [{ journeyId: selectedJourney }];
+        payload.arguments.execute.inArguments = [{ journeyIds: selectedJourneys }];
 
         payload.metaData = payload.metaData || {};
         payload.metaData.isConfigured = true;

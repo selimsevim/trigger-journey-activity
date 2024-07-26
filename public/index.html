@@ -4,17 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Journey Builder Activity</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/postmonger/1.0.15/postmonger.min.js"></script>
     <script src="js/customActivity.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
+            margin: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        .checkbox-group label {
+            margin: 5px 0;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Custom Activity Configuration</h1>
     <form id="configuration-form">
-        <label for="journey-select">Select a Journey:</label>
-        <select id="journey-select" name="journey-select">
-            <option value="">Loading...</option>
-        </select>
+        <div class="checkbox-group" id="journey-checkboxes">
+            <label for="journey-select">Select Journeys to Monitor:</label>
+        </div>
         <button type="submit">Save</button>
     </form>
 </body>
