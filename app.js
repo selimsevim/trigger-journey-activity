@@ -23,10 +23,6 @@ if ('development' == app.get('env')) {
   app.use(errorhandler());
 }
 
-app.get('/', routes.index );
-app.post('/login', routes.login );
-app.post('/logout', routes.logout );
-
 // Custom Routes for MC
 app.post('/journeybuilder/save/', activity.save );
 app.post('/journeybuilder/validate/', activity.validate );
