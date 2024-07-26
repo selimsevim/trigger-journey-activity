@@ -1,42 +1,43 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-const port = process.env.PORT || 3000;
+'use strict';
+// Module Dependencies
+// -------------------
+var express     = require('express');
+var bodyParser  = require('body-parser');
+var errorhandler = require('errorhandler');
+var http        = require('http');
+var path        = require('path');
+var request     = require('request');
+var routes      = require('./routes');
+var activity    = require('./routes/activity');
 
-app.use(bodyParser.json());
+// EXPRESS CONFIGURATION
+var app = express();
+
+// Configure Express
+app.set('port', process.env.PORT || 3000);
+app.use(bodyParser.raw({type: 'application/jwt'}));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(bodyParser.json());
 
-console.log("test");
+// Express in Development Mode
+if ('development' == app.get('env')) {
+  app.use(errorhandler());
+}
 
-app.post('/execute', (req, res) => {
-    const { inArguments } = req.body;
-    console.log('Received inArguments:', inArguments);
+app.get('/', routes.index );
+app.post('/login', routes.login );
+app.post('/logout', routes.logout );
 
-    // Sample response
-    res.status(200).json({ foundSignupDate: '2016-03-10' });
-});
+// Custom Routes for MC
+app.post('/journeybuilder/save/', activity.save );
+app.post('/journeybuilder/validate/', activity.validate );
+app.post('/journeybuilder/publish/', activity.publish );
+app.post('/journeybuilder/execute/', activity.execute );
 
-app.post('/save', (req, res) => {
-    console.log('Save request:', req.body);
-    res.status(200).send('Save Successful');
-});
 
-app.post('/publish', (req, res) => {
-    console.log('Publish request:', req.body);
-    res.status(200).send('Publish Successful');
-});
-
-app.post('/validate', (req, res) => {
-    console.log('Validate request:', req.body);
-    res.status(200).send('Validate Successful');
-});
-
-app.post('/stop', (req, res) => {
-    console.log('Stop request:', req.body);
-    res.status(200).send('Stop Successful');
-});
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+http.createServer(app).listen(
+  app.get('port'), function(){
+    console.log('Express server listening on port ' + app.get('port'));
+  }
+);

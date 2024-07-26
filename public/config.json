@@ -1,68 +1,85 @@
 {
-  "workflowApiVersion": "1.1",
-  "metaData": {
-    "icon": "images/icon.svg",
-    "category": "customer"
-  },
-  "type": "REST",
-  "lang": {
-    "en-US": {
-      "name": "Discount Code",
-      "description": "Issue a discount code to contact them to entice them to buy something."
-    }
-  },
-  "arguments": {
-    "execute": {
-      "inArguments": [
+    "workflowApiVersion": "1.1",
+    "metaData":
+    {
+        "icon": "images/icon.png",
+        "iconSmall": "images/iconSmall.png",
+        "category": "<CATEGORY_OF_APP_BASED_ON_DOCS>"
+    },
+
+    "type": "REST",
+    "lang":
+    {
+        "en-US":
         {
-          "discount": 10
+            "name": "<NAME_OF_APP>",
+            "description": "<DESC_OF_APP>",
+            "step1Label": "Configure Activity"
         }
-      ],
-      "outArguments": [],
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/execute",
-      "timeout": 10000,
-      "retryCount": 3,
-      "retryDelay": 1000,
-      "concurrentRequests": 5
-    }
-  },
-  "configurationArguments": {
-    "publish": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/publish"
     },
-    "validate": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/validate"
+    "arguments":
+    {
+        "execute":
+        {
+            "inArguments": [
+              { 
+                "SAMPLE_PARAM": "SAMPLE PARAM DATA FROM CONFIG.JSON"
+              }
+            ],
+            "outArguments": [],
+            "url": "<HTTPS_URL_OF_APP>/journeybuilder/execute",
+            "verb": "POST",
+            "body": "",
+            "header": "",
+            "format": "json",
+            "useJwt": true,
+            "timeout": 10000
+        }
     },
-    "stop": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/stop"
-    }
-  },
-  "userInterfaces": {
-    "configurationSupportsReadOnlyMode": true,
-    "configInspector": {
-      "size": "scm-lg",
-      "emptyIframe": true
-    }
-  },
-  "schema": {
-    "arguments": {
-      "execute": {
-        "inArguments": [],
-        "outArguments": [
-          {
-            "discountCode": {
-              "dataType": "Text",
-              "direction": "out",
-              "access": "visible"
-            },
-            "discount": {
-              "dataType": "Number",
-              "direction": "out",
-              "access": "visible"
+    
+    "configurationArguments":
+    {
+        "applicationExtensionKey": "<APP EXTENSION KEY>",
+        "save":
+        {
+            "url": "<HTTPS_URL_OF_APP>/journeybuilder/save",
+            "verb": "POST",
+            "useJwt": true
+        },
+        "publish":
+        {
+            "url": "<HTTPS_URL_OF_APP>/journeybuilder/publish",
+            "verb": "POST",
+            "useJwt": true
+        },
+        "stop":
+        {
+            "url": "<HTTPS_URL_OF_APP>/journeybuilder/stop",
+            "verb": "POST",
+            "useJwt": true
+        },
+        "validate":
+        {
+            "url": "<HTTPS_URL_OF_APP>/journeybuilder/validate",
+            "verb": "POST",
+            "useJwt": true
+        }
+    },
+    "userInterfaces":
+    {
+        "configModal": {
+            "height": 700,
+            "width": 1000,
+            "fullscreen": false
+        }
+    },
+    "schema": 
+    {
+        "arguments":{
+            "execute": {
+                "inArguments": [],
+                "outArguments": []
             }
-          }
-        ]
-      }
+        }
     }
-  }
 }

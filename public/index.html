@@ -1,30 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>discount-code Activity</title>
+    <title>JOURNEY BUILDER APP TEMPLATE</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie-edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href='https://fonts.googleapis.com/css?family=lobster' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.8.3/fonts/SalesforceSans-Bold.ttf">
+    <link rel='stylesheet' href="css/styles.css">
+    
+    <script type="text/javascript" src="js/require.js"></script>
+    <script type="text/javascript">
+        (function() {
+            var config = {
+                baseUrl: 'js'
+            };
+            var dependencies = [
+                'customActivity'
+            ];
+            require(config, dependencies);
+        })();
+    </script>
 </head>
+
+
 <body>
-<div class="slds-form slds-m-around--medium">
-    <div class="slds-form-element slds-m-bottom_small">
-        <label class="slds-form-element__label" for="discount-code">Select Label</label>
-        <div class="slds-form-element__control">
-            <div class="slds-select_container">
-                <select class="slds-select" id="discount-code">
-                    <option value="10">10%</option>
-                    <option value="15">15%</option>
-                    <option value="20">20%</option>
-                    <option value="25">25%</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="discount-code-output" class="slds-text-heading_small"></div>
-<div class="slds-docked-form-footer" style="justify-content: flex-end">
-    <button id="cancel" type="button" class="slds-button slds-button_neutral">Cancel</button>
-    <button id="done" disabled type="button" class="slds-button slds-button_brand slds-m-right--medium">Done</button>
-</div>
+    <h1>THIS IS THE APP UI PORTION</h1>
 </body>
+
 </html>

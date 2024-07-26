@@ -1,17 +1,44 @@
 {
-  "name": "trigger-journey-activity",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "smsTemplate",
+  "version": "1.0.1",
+  "description": "Send SMS Journey Builder",
+  "engines": {
+    "node": "^12.12.16"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "journey",
+    "builder",
+    "salesforce marketing cloud",
+    "heroku"
+  ],
+  "author": "TheonThai",
+  "homepage": "",
   "dependencies": {
-    "axios": "^1.7.2",
-    "body-parser": "^1.20.2",
-    "express": "^4.19.2"
+    "axios": "^0.21.2",
+    "base64url": "^3.0.1",
+    "body-parser": "^1.19.0",
+    "bower": "^1.8.8",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.1",
+    "file-system": "^2.2.2",
+    "jsforce": "^1.9.3",
+    "jsonwebtoken": "^8.5.1",
+    "njwt": "^1.0.0",
+    "node-libcurl": "^2.0.3",
+    "path": "^0.12.7",
+    "pg": "^7.14.0",
+    "request": "^2.88.0",
+    "require": "^2.4.20",
+    "sfmc-fuelsdk-node": "^2.4.0",
+    "superagent": "^5.1.2",
+    "uglify-js": "^3.7.2"
   }
 }
