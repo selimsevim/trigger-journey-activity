@@ -7,15 +7,13 @@ var errorhandler = require('errorhandler');
 var http        = require('http');
 var path        = require('path');
 var request     = require('request');
-var routes      = require('./routes');
-var activity    = require('./routes/activity');
+
 
 // EXPRESS CONFIGURATION
 var app = express();
 
 // Configure Express
 app.set('port', process.env.PORT || 3000);
-app.use(bodyParser.raw({type: 'application/jwt'}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
