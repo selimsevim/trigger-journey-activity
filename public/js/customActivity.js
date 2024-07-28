@@ -71,7 +71,7 @@ define(['postmonger'], function (Postmonger) {
                 });
 
                 if (journeys.length === 0) {
-                    $('#loading-message').text('No journeys with API Event entry source found');
+                    $('#loading-message').text('No journeys with API Event entry source was found.');
                 } else {
                     populateJourneys(journeys);
                     $('#loading-message').hide();

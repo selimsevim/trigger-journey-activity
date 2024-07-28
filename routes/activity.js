@@ -4,8 +4,6 @@ const util = require('util');
 
 // Global Variables
 const tokenURL = `${process.env.authenticationUrl}/v2/token`;
-const interactionsURL = `${process.env.restBaseURL}/interaction/v1/interactions/`;
-const triggerURL = `${process.env.restBaseURL}/interaction/v1/events`;
 
 // Log function for demonstration purposes
 function logData(req) {
@@ -20,14 +18,31 @@ exports.edit = function (req, res) {
     res.status(200).send('Edit');
 };
 
-exports.save = function (req, res) {
-    console.log("test");
-    res.status(200).send('Save');
+exports.save = async function (req, res) {
+    logData(req);
+    try {
+        const payload = req.body;
+        // Save the journey ID and payload in your storage (e.g., database)
+        // This is a placeholder, replace it with actual storage logic
+        await saveToDatabase(payload);
+        res.status(200).send('Save');
+    } catch (error) {
+        console.error('Error saving data:', error);
+        res.status(500).send('Error saving data');
+    }
 };
 
-exports.execute = function (req, res) {
+exports.execute = async function (req, res) {
     logData(req);
-    res.status(200).send('Execute');
+    try {
+        const { contactKey, journeyId, payload } = req.body;
+        const token = await retrieveToken();
+        await triggerJourney(token, contactKey, journeyId, payload);
+        res.status(200).send('Execute');
+    } catch (error) {
+        console.error('Error executing journey:', error);
+        res.status(500).send('Error executing journey');
+    }
 };
 
 exports.publish = function (req, res) {
@@ -63,51 +78,27 @@ async function retrieveToken() {
 }
 
 /*
- * Function to retrieve journeys
+ * Function to trigger a journey
  */
-async function fetchJourneys(token) {
+async function triggerJourney(token, contactKey, journeyId, payload) {
+    const triggerUrl = `${process.env.restBaseURL}/interaction/v1/events`;
+    const eventPayload = {
+        ContactKey: contactKey,
+        EventDefinitionKey: journeyId,
+        Data: payload
+    };
     try {
-        const response = await axios.get(interactionsURL, {
+        await axios.post(triggerUrl, eventPayload, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
-        return response.data;
     } catch (error) {
-        console.error('Error fetching journeys:', error);
+        console.error('Error triggering journey:', error);
         throw error;
     }
 }
 
 /*
- * GET Handler for /journeys route
- */
-exports.getJourneys = async function (req, res) {
-    try {
-        const token = await retrieveToken();
-        const journeys = await fetchJourneys(token);
-        res.status(200).json(journeys);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-
-/*
- * POST Handler for /trigger-journey route
- */
-exports.triggerJourney = async function (req, res) {
-    try {
-        const token = await retrieveToken();
-        const response = await axios.post(triggerURL, req.body, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        res.status(200).json(response.data);
-    } catch (error) {
-        console.error('Error triggering journey:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
+ * Placeholder function to simulate saving to a
