@@ -26,7 +26,7 @@ define(['postmonger'], function (Postmonger) {
     connection.on('requestedTriggerEventDefinition', function (eventDefinitionModel) {
         if (eventDefinitionModel) {
             currentApiEventKey = eventDefinitionModel.eventDefinitionKey;
-            console.log('Event Definition Key:', currentEventDefinitionKey);
+            console.log('Event Definition Key:', currentApiEventKey);
         }
     });
 
@@ -62,8 +62,8 @@ define(['postmonger'], function (Postmonger) {
             success: function (response) {
                 journeys = response.items.filter(journey => {
                     if (journey.defaults && journey.defaults.email) {
-                        let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
-                        return apiEventKey !== currentApiEventKey;
+                        return journey.defaults.email.some(email => email.includes('APIEvent')) &&
+                               journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1]; !== currentApiEventKey;
                     }
                     return false;
                 });
