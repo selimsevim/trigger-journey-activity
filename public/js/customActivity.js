@@ -6,7 +6,7 @@ define(['postmonger'], function (Postmonger) {
     let schema = {};
     let journeys = [];
     let selectedJourney = null;
-    let currentEventDefinitionKey = null;
+    let currentApiEventKey = null;
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -25,8 +25,8 @@ define(['postmonger'], function (Postmonger) {
     connection.trigger('requestTriggerEventDefinition');
     connection.on('requestedTriggerEventDefinition', function (eventDefinitionModel) {
         if (eventDefinitionModel) {
-            currentEventDefinitionKey = eventDefinitionModel.eventDefinitionKey;
-            console.log('Event Definition Key:', currentEventDefinitionKey);
+            currentApiEventKey = eventDefinitionModel.eventDefinitionKey.split('.')[1];
+            console.log('Event Definition Key:', currentApiEventKey);
         }
     });
 
@@ -61,8 +61,8 @@ define(['postmonger'], function (Postmonger) {
             success: function (response) {
                 journeys = response.items.filter(journey => {
                     if (journey.defaults && journey.defaults.email) {
-                        return journey.defaults.email.some(email => email.includes('APIEvent')) &&
-                               journey.eventDefinitionKey !== currentEventDefinitionKey;
+                        let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
+                        return apiEventKey !== currentApiEventKey;
                     }
                     return false;
                 });
