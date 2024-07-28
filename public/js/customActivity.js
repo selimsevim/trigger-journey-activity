@@ -12,6 +12,7 @@ define(['postmonger'], function (Postmonger) {
         connection.trigger('ready');
         connection.trigger('requestTokens');
         connection.trigger('requestEndpoints');
+        fetchJourneys();
     }
 
     connection.trigger('requestTriggerEventDefinition');
@@ -25,7 +26,7 @@ define(['postmonger'], function (Postmonger) {
         if (data) {
             payload = data;
         }
-        fetchJourneys();
+       
     }
 
     function save() {
