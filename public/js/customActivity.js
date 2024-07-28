@@ -63,7 +63,7 @@ define(['postmonger'], function (Postmonger) {
                 journeys = response.items.filter(journey => {
                     if (journey.defaults && journey.defaults.email) {
                         return journey.defaults.email.some(email => email.includes('APIEvent')) &&
-                               journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1]; !== currentApiEventKey;
+                               journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1] !== currentApiEventKey;
                     }
                     return false;
                 });
