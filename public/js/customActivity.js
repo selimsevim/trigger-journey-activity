@@ -61,7 +61,7 @@ define(['postmonger'], function (Postmonger) {
                     if (journey.defaults && journey.defaults.email) {
                         let apiEventEmail = journey.defaults.email.find(email => email.includes('APIEvent'));
                         if (apiEventEmail) {
-                            let apiEventKey = apiEventEmail.split('"')[1].split('.')[1];
+                            let apiEventKey = apiEventEmail.match(/Event\.APIEvent-([a-z0-9-]+)\./)[1];
                             console.log(apiEventKey);
                             console.log(currentApiEventKey);
                             return apiEventKey !== currentApiEventKey;
