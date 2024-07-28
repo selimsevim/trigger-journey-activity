@@ -19,7 +19,7 @@ exports.edit = function (req, res) {
 };
 
 exports.save = function (req, res) {
-    logData(req);
+    console.log("test");
     res.status(200).send('Save');
 };
 
