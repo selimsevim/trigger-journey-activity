@@ -18,24 +18,7 @@
         }
     },
 
-  "arguments": {
-    "execute": {
-      "inArguments": [
-        {
-          "emailAddress": "{{InteractionDefaults.Email}}"
-        },
-        {
-          "phoneNumber": "{{Contact.Default.PhoneNumber}}"
-        }
-      ],
-      "outArguments": [
-        {
-          "foundSignupDate": ""
-        }
-      ],
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/execute"
-    }
-  },
+
     
     "configurationArguments":
     {
@@ -64,40 +47,18 @@
     "userInterfaces":
     {
         "configModal": {
-            "height": 200,
-            "width": 300,
+            "height": 500,
+            "width": 500,
             "fullscreen": false
         }
     },
-    "schema": {
-    "arguments": {
-      "execute": {
-        "inArguments": [
-          {
-            "phoneNumber": {
-              "dataType": "Phone",
-              "isNullable": false,
-              "direction": "in"
+    "schema": 
+    {
+        "arguments":{
+            "execute": {
+                "inArguments": [],
+                "outArguments": []
             }
-          },
-          {
-            "emailAddress": {
-              "dataType": "Email",
-              "isNullable": false,
-              "direction": "in"
-            }
-          }
-        ],
-        "outArguments": [
-          {
-            "foundSignupDate": {
-              "dataType": "Date",
-              "direction": "out",
-              "access": "visible"
-            }
-          }
-        ]
-      }
+        }
     }
-  }
 }

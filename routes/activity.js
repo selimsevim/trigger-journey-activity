@@ -3,7 +3,9 @@ const axios = require("axios");
 const util = require('util');
 
 // Global Variables
-const tokenURL = `${process.env.authenticationUrl}/v2/token`;
+const tokenURL = `${process.env.AUTHENTICATION_URL}/v2/token`;
+const interactionsURL = `${process.env.REST_BASE_URL}/interaction/v1/interactions/`;
+const triggerURL = `${process.env.REST_BASE_URL}/interaction/v1/events`;
 
 // Log function for demonstration purposes
 function logData(req) {
@@ -46,44 +48,66 @@ exports.stop = function (req, res) {
 /*
  * Function to retrieve an access token
  */
-function retrieveToken() {
-    return axios.post(tokenURL, {
-        grant_type: 'client_credentials',
-        client_id: process.env.clientId,
-        client_secret: process.env.clientSecret
-    })
-    .then(response => response.data.access_token)
-    .catch(error => {
+async function retrieveToken() {
+    try {
+        const response = await axios.post(tokenURL, {
+            grant_type: 'client_credentials',
+            client_id: process.env.CLIENT_ID,
+            client_secret: process.env.CLIENT_SECRET
+        });
+        return response.data.access_token;
+    } catch (error) {
         console.error('Error retrieving token:', error);
         throw error;
-    });
+    }
 }
 
 /*
  * Function to retrieve journeys
  */
-function fetchJourneys(token) {
-    const journeysUrl = `${process.env.restBaseURL}/interaction/v1/interactions/`;
-
-    return axios.get(journeysUrl, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.data)
-    .catch(error => {
+async function fetchJourneys(token) {
+    try {
+        const response = await axios.get(interactionsURL, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return response.data;
+    } catch (error) {
         console.error('Error fetching journeys:', error);
         throw error;
-    });
+    }
 }
 
 /*
  * GET Handler for /journeys route
  */
-exports.getJourneys = function (req, res) {
-    retrieveToken()
-        .then(token => fetchJourneys(token))
-        .then(journeys => res.status(200).json(journeys))
-        .catch(error => res.status(500).json({ error: 'Internal Server Error' }));
+exports.getJourneys = async function (req, res) {
+    try {
+        const token = await retrieveToken();
+        const journeys = await fetchJourneys(token);
+        res.status(200).json(journeys);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+/*
+ * POST Handler for /trigger-journey route
+ */
+exports.triggerJourney = async function (req, res) {
+    try {
+        const token = await retrieveToken();
+        const response = await axios.post(triggerURL, req.body, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        res.status(200).json(response.data);
+    } catch (error) {
+        console.error('Error triggering journey:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 };

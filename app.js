@@ -34,6 +34,9 @@ app.post('/journeybuilder/execute/', activity.execute);
 // New route to get journeys
 app.get('/journeys', activity.getJourneys);
 
+// New route to trigger journey
+app.post('/trigger-journey', activity.triggerJourney);
+
 http.createServer(app).listen(
   app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));

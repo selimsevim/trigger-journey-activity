@@ -3,10 +3,17 @@ define(['postmonger'], function (Postmonger) {
 
     let connection = new Postmonger.Session();
     let payload = {};
+    let schema = {};
+    let journeys = [];
+    let selectedJourney = null;
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
     connection.on('clickedNext', save);
+    connection.on('requestedSchema', function(data) {
+        schema = data['schema'];
+        console.log('Schema:', schema);
+    });
 
     function onRender() {
         connection.trigger('ready');
@@ -25,35 +32,19 @@ define(['postmonger'], function (Postmonger) {
         if (data) {
             payload = data;
         }
+        connection.trigger('requestSchema');
         fetchJourneys();
     }
 
     function save() {
-        let selectedJourneys = $('input[name="journey"]:checked').map(function () {
-            return $(this).val();
-        }).get();
+        let selectedJourneyId = $('input[name="journey"]:checked').val();
+        let selectedJourney = journeys.find(j => j.id === selectedJourneyId);
 
-        var hasInArguments = Boolean(
-            payload["arguments"] &&
-            payload["arguments"].execute &&
-            payload["arguments"].execute.inArguments &&
-            payload["arguments"].execute.inArguments.length > 0
-        );
+        if (selectedJourney) {
+            triggerJourney(selectedJourney);
+        }
 
-        var inArguments = hasInArguments
-            ? payload["arguments"].execute.inArguments
-            : [];
-
-        inArguments.push({
-            SAMPLE_PARAM: "SAMPLE PARAM DATA FROM CONFIG.JSON"
-        });
-        inArguments.push({
-            journeyIds: selectedJourneys
-        });
-
-        payload["arguments"].execute.inArguments = inArguments;
         payload['metaData'].isConfigured = true;
-        console.log('Payload:', payload["arguments"]);
         connection.trigger('updateActivity', payload);
     }
 
@@ -66,7 +57,11 @@ define(['postmonger'], function (Postmonger) {
                 $('#journey-checkboxes').hide();
             },
             success: function (response) {
-                populateJourneys(response.items);
+                journeys = response.items.filter(journey => {
+                    return journey.defaults && journey.defaults.email &&
+                           journey.defaults.email.some(email => email.includes('APIEvent'));
+                });
+                populateJourneys(journeys);
                 $('#loading-message').hide();
                 $('#journey-checkboxes').show();
             },
@@ -83,6 +78,7 @@ define(['postmonger'], function (Postmonger) {
         $checkboxGroup.append('<label>Select Journeys to Monitor:</label>');
 
         journeys.forEach(function (journey) {
+            let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
             $checkboxGroup.append(
                 $('<label>', {
                     text: journey.name
@@ -90,10 +86,37 @@ define(['postmonger'], function (Postmonger) {
                     $('<input>', {
                         type: 'checkbox',
                         name: 'journey',
-                        value: journey.id
+                        value: journey.id,
+                        'data-api-event-key': apiEventKey
                     })
                 )
             );
+        });
+    }
+
+    function triggerJourney(journey) {
+        let apiEventKey = $('input[name="journey"]:checked').data('api-event-key');
+        let eventData = {};
+
+        schema.forEach(field => {
+            eventData[field.key] = `{{${field.key}}}`;
+        });
+
+        $.ajax({
+            url: '/trigger-journey',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                ContactKey: payload['arguments'].execute.inArguments[0].ContactKey,
+                EventDefinitionKey: apiEventKey,
+                Data: eventData
+            }),
+            success: function (response) {
+                console.log('Journey triggered successfully:', response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error triggering journey:', error);
+            }
         });
     }
 });
