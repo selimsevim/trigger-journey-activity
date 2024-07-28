@@ -12,7 +12,6 @@ define(['postmonger'], function (Postmonger) {
         connection.trigger('ready');
         connection.trigger('requestTokens');
         connection.trigger('requestEndpoints');
-        fetchJourneys();
     }
 
     connection.trigger('requestTriggerEventDefinition');
@@ -26,7 +25,7 @@ define(['postmonger'], function (Postmonger) {
         if (data) {
             payload = data;
         }
-       
+        fetchJourneys();
     }
 
     function save() {
@@ -48,11 +47,18 @@ define(['postmonger'], function (Postmonger) {
         $.ajax({
             url: '/journeys',
             type: 'GET',
+            beforeSend: function() {
+                $('#loading-message').show();
+                $('#journey-checkboxes').hide();
+            },
             success: function (response) {
                 populateJourneys(response.items);
+                $('#loading-message').hide();
+                $('#journey-checkboxes').show();
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching journeys:', error);
+                $('#loading-message').text('Error loading journeys. Please try again.');
             }
         });
     }
