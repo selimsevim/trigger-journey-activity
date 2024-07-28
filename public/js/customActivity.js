@@ -6,7 +6,6 @@ define(['postmonger'], function (Postmonger) {
     let schema = {};
     let journeys = [];
     let selectedJourney = null;
-    let currentApiEventKey = null;
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -28,7 +27,6 @@ define(['postmonger'], function (Postmonger) {
             currentApiEventKey = eventDefinitionModel.eventDefinitionKey;
         }
     });
-
 
     function initialize(data) {
         if (data) {
@@ -60,22 +58,12 @@ define(['postmonger'], function (Postmonger) {
             },
             success: function (response) {
                 journeys = response.items.filter(journey => {
-                    if (journey.defaults && journey.defaults.email) {
-                        console.log(journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1]);
-                        console.log(currentApiEventKey);
-                        return journey.defaults.email.some(email => email.includes('APIEvent')) &&
-                               journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1] !== currentApiEventKey;
-                    }
-                    return false;
+                    return journey.defaults && journey.defaults.email &&
+                           journey.defaults.email.some(email => email.includes('APIEvent'));
                 });
-
-                if (journeys.length === 0) {
-                    $('#loading-message').text('No journeys with API Event entry source found');
-                } else {
-                    populateJourneys(journeys);
-                    $('#loading-message').hide();
-                    $('#journey-checkboxes').show();
-                }
+                populateJourneys(journeys);
+                $('#loading-message').hide();
+                $('#journey-checkboxes').show();
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching journeys:', error);
@@ -91,6 +79,8 @@ define(['postmonger'], function (Postmonger) {
 
         journeys.forEach(function (journey) {
             let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
+            // Only append the journey if its apiEventKey is different from the currentApiEventKey
+            if (apiEventKey !== currentApiEventKey) {
             $checkboxGroup.append(
                 $('<label>', {
                     text: journey.name
