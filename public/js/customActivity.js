@@ -5,7 +5,7 @@ define(['postmonger'], function (Postmonger) {
     let payload = {};
     let schema = {};
     let journeys = [];
-    let selectedJourney = null;
+    let currentApiEventKey = null;
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -58,12 +58,20 @@ define(['postmonger'], function (Postmonger) {
             },
             success: function (response) {
                 journeys = response.items.filter(journey => {
-                    return journey.defaults && journey.defaults.email &&
-                           journey.defaults.email.some(email => email.includes('APIEvent'));
+                    if (journey.defaults && journey.defaults.email) {
+                        let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
+                        return apiEventKey !== currentApiEventKey;
+                    }
+                    return false;
                 });
-                populateJourneys(journeys);
-                $('#loading-message').hide();
-                $('#journey-checkboxes').show();
+
+                if (journeys.length === 0) {
+                    $('#loading-message').text('No journeys with API Event entry source found');
+                } else {
+                    populateJourneys(journeys);
+                    $('#loading-message').hide();
+                    $('#journey-checkboxes').show();
+                }
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching journeys:', error);
@@ -79,8 +87,6 @@ define(['postmonger'], function (Postmonger) {
 
         journeys.forEach(function (journey) {
             let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
-            // Only append the journey if its apiEventKey is different from the currentApiEventKey
-            if (apiEventKey !== currentApiEventKey) {
             $checkboxGroup.append(
                 $('<label>', {
                     text: journey.name
