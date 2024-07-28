@@ -33,12 +33,25 @@ define(['postmonger'], function (Postmonger) {
             return $(this).val();
         }).get();
 
-        payload['arguments'].execute.inArguments = [
-            {
-                SAMPLE_PARAM: "SAMPLE PARAM DATA FROM CONFIG.JSON",
-                journeyIds: selectedJourneys
-            }
-        ];
+        var hasInArguments = Boolean(
+            payload["arguments"] &&
+            payload["arguments"].execute &&
+            payload["arguments"].execute.inArguments &&
+            payload["arguments"].execute.inArguments.length > 0
+        );
+
+        var inArguments = hasInArguments
+            ? payload["arguments"].execute.inArguments
+            : [];
+
+        inArguments.push({
+            SAMPLE_PARAM: "SAMPLE PARAM DATA FROM CONFIG.JSON"
+        });
+        inArguments.push({
+            journeyIds: selectedJourneys
+        });
+
+        payload["arguments"].execute.inArguments = inArguments;
         payload['metaData'].isConfigured = true;
         connection.trigger('updateActivity', payload);
     }
