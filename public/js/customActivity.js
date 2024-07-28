@@ -41,7 +41,13 @@ define(['postmonger'], function (Postmonger) {
         let selectedJourney = journeys.find(j => j.id === selectedJourneyId);
 
         if (selectedJourney) {
-            triggerJourney(selectedJourney);
+            payload['arguments'].execute.inArguments = [
+                {
+                    contactKey: '{{Contact.Key}}',
+                    journeyId: selectedJourney.id,
+                    payload: schema
+                }
+            ];
         }
 
         payload['metaData'].isConfigured = true;
@@ -62,8 +68,6 @@ define(['postmonger'], function (Postmonger) {
                         let apiEventEmail = journey.defaults.email.find(email => email.includes('APIEvent'));
                         if (apiEventEmail) {
                             let apiEventKey = apiEventEmail.match(/APIEvent-([a-z0-9-]+)/)[0];
-                            console.log(apiEventKey);
-                            console.log(currentApiEventKey);
                             return apiEventKey !== currentApiEventKey;
                         }
                     }
@@ -104,32 +108,6 @@ define(['postmonger'], function (Postmonger) {
                     })
                 )
             );
-        });
-    }
-
-    function triggerJourney(journey) {
-        let apiEventKey = $('input[name="journey"]:checked').data('api-event-key');
-        let eventData = {};
-
-        schema.forEach(field => {
-            eventData[field.key] = `{{${field.key}}}`;
-        });
-
-        $.ajax({
-            url: '/trigger-journey',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                ContactKey: payload['arguments'].execute.inArguments[0].ContactKey,
-                EventDefinitionKey: apiEventKey,
-                Data: eventData
-            }),
-            success: function (response) {
-                console.log('Journey triggered successfully:', response);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error triggering journey:', error);
-            }
         });
     }
 });
