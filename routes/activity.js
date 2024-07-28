@@ -3,9 +3,9 @@ const axios = require("axios");
 const util = require('util');
 
 // Global Variables
-const tokenURL = `${process.env.AUTHENTICATION_URL}/v2/token`;
-const interactionsURL = `${process.env.REST_BASE_URL}/interaction/v1/interactions/`;
-const triggerURL = `${process.env.REST_BASE_URL}/interaction/v1/events`;
+const tokenURL = `${process.env.authenticationUrl}/v2/token`;
+const interactionsURL = `${process.env.restBaseURL}/interaction/v1/interactions/`;
+const triggerURL = `${process.env.restBaseURL}/interaction/v1/events`;
 
 // Log function for demonstration purposes
 function logData(req) {
@@ -52,8 +52,8 @@ async function retrieveToken() {
     try {
         const response = await axios.post(tokenURL, {
             grant_type: 'client_credentials',
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET
+            client_id: process.env.clientId,
+            client_secret: process.env.clientSecret
         });
         return response.data.access_token;
     } catch (error) {
