@@ -59,8 +59,11 @@ define(['postmonger'], function (Postmonger) {
             success: function (response) {
                 journeys = response.items.filter(journey => {
                     if (journey.defaults && journey.defaults.email) {
-                        let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
-                        return apiEventKey !== currentApiEventKey;
+                        let apiEventEmail = journey.defaults.email.find(email => email.includes('APIEvent'));
+                        if (apiEventEmail) {
+                            let apiEventKey = apiEventEmail.split('"')[1].split('.')[1];
+                            return apiEventKey !== currentApiEventKey;
+                        }
                     }
                     return false;
                 });
