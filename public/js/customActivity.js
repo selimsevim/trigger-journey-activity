@@ -25,10 +25,11 @@ define(['postmonger'], function (Postmonger) {
     connection.trigger('requestTriggerEventDefinition');
     connection.on('requestedTriggerEventDefinition', function (eventDefinitionModel) {
         if (eventDefinitionModel) {
-            currentApiEventKey = eventDefinitionModel.eventDefinitionKey.split('.')[1];
-            console.log('Event Definition Key:', currentApiEventKey);
+            currentApiEventKey = eventDefinitionModel.eventDefinitionKey;
+            console.log('Event Definition Key:', currentEventDefinitionKey);
         }
     });
+
 
     function initialize(data) {
         if (data) {
@@ -66,9 +67,14 @@ define(['postmonger'], function (Postmonger) {
                     }
                     return false;
                 });
-                populateJourneys(journeys);
-                $('#loading-message').hide();
-                $('#journey-checkboxes').show();
+
+                if (journeys.length === 0) {
+                    $('#loading-message').text('No journeys with API Event entry source found');
+                } else {
+                    populateJourneys(journeys);
+                    $('#loading-message').hide();
+                    $('#journey-checkboxes').show();
+                }
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching journeys:', error);
