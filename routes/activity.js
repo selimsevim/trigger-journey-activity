@@ -78,6 +78,19 @@ async function retrieveToken() {
 }
 
 /*
+ * GET Handler for /journeys route
+ */
+exports.getJourneys = async function (req, res) {
+    try {
+        const token = await retrieveToken();
+        const journeys = await fetchJourneys(token);
+        res.status(200).json(journeys);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+/*
  * Function to trigger a journey
  */
 async function triggerJourney(token, contactKey, journeyId, payload) {
