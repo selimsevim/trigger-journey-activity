@@ -35,12 +35,19 @@ exports.save = async function (req, res) {
 exports.execute = async function (req, res) {
     logData(req);
     try {
-        console.log("test");
-        console.log(req.body);
-        console.log("test");
-        const { contactKey, journeyId, payload } = req.body;
+        console.log("Request Body:", req.body);
+
+        const inArguments = req.body.inArguments[0]; // Extract the first item in inArguments array
+        const contactKey = inArguments.contactKey;
+        const journeyId = inArguments.selectedJourneyId;
+        const data = inArguments.payload;
+
+        console.log("Extracted ContactKey:", contactKey);
+        console.log("Extracted JourneyId:", journeyId);
+        console.log("Extracted Data:", data);
+
         const token = await retrieveToken();
-        await triggerJourney(token, contactKey, journeyId, payload);
+        await triggerJourney(token, contactKey, journeyId, data);
         res.status(200).send('Execute');
     } catch (error) {
         console.error('Error executing journey:', error);
@@ -83,15 +90,12 @@ async function retrieveToken() {
 /*
  * Function to trigger a journey
  */
-async function triggerJourney(token, contactKey, journeyId, payload) {
+async function triggerJourney(token, contactKey, journeyId, data) {
     const triggerUrl = `${process.env.restBaseURL}/interaction/v1/events`;
-    console.log(contactKey);
-    console.log(journeyId);
-    console.log(payload);
     const eventPayload = {
         ContactKey: contactKey,
         EventDefinitionKey: journeyId,
-        Data: payload
+        Data: data
     };
     try {
         await axios.post(triggerUrl, eventPayload, {

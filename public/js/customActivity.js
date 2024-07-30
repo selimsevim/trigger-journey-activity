@@ -73,7 +73,7 @@ define(['postmonger'], function (Postmonger) {
             {
                 contactKey: '{{Contact.Key}}',
                 selectedJourneyId: selectedJourneyId || null,
-                schema: argArr
+                payload: argArr
             }
         ];
 
