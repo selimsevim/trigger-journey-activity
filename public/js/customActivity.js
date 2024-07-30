@@ -6,6 +6,7 @@ define(['postmonger'], function (Postmonger) {
     var schema = {};
     var journeys = [];
     var currentApiEventKey = null;
+    var entrySourceData = [];
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -31,20 +32,9 @@ define(['postmonger'], function (Postmonger) {
 
         connection.trigger('requestSchema');
         connection.on('requestedSchema', function (data) {
-
-    // add entry source attributes as inArgs
-        const schema = data['schema'];
-
-    for (var i = 0, l = schema.length; i < l; i++) {
-        var inArg = {};
-        let attr = schema[i].key;
-        let keyIndex = attr.lastIndexOf('.') + 1;
-        inArg[attr.substring(keyIndex)] = '{{' + attr + '}}';
-        payload['arguments'].execute.inArguments.push(inArg);
-    }
-  });
-
-  const argArr = payload['arguments'].execute.inArguments;
+            schema = data['schema'];
+            entrySourceData = addEntrySourceAttributesToInArguments(schema);
+        });
 
         var hasInArguments = Boolean(
             payload.arguments &&
@@ -58,7 +48,6 @@ define(['postmonger'], function (Postmonger) {
         var selectedJourneyId = null;
         if (inArguments.length > 0) {
             selectedJourneyId = inArguments[0].selectedJourneyId;
-            schema = inArguments[0].schema || {};
         }
 
         fetchJourneys(selectedJourneyId);
@@ -67,13 +56,11 @@ define(['postmonger'], function (Postmonger) {
     function save() {
         var selectedJourneyId = $('input[name="journey"]:checked').val();
 
-
-
         payload.arguments.execute.inArguments = [
             {
                 contactKey: '{{Contact.Key}}',
                 selectedJourneyId: selectedJourneyId || null,
-                payload: argArr
+                payload: entrySourceData
             }
         ];
 
@@ -139,5 +126,15 @@ define(['postmonger'], function (Postmonger) {
                 }).prepend($radio)
             );
         });
+    }
+
+    function addEntrySourceAttributesToInArguments(schema) {
+        var data = {};
+        for (var i = 0; i < schema.length; i++) {
+            let attr = schema[i].key;
+            let keyIndex = attr.lastIndexOf('.') + 1;
+            data[attr.substring(keyIndex)] = `{{${attr}}}`;
+        }
+        return data;
     }
 });
