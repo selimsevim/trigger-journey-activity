@@ -13,6 +13,7 @@ define(['postmonger'], function (Postmonger) {
     connection.on('requestedSchema', function(data) {
         schema = data['schema'];
         console.log('Schema:', schema);
+        console.log('Schema:', schema[0].value);
         addEntrySourceAttributesToInArguments(schema);
     });
 
