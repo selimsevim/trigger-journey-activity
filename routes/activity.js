@@ -36,6 +36,9 @@ exports.execute = async function (req, res) {
     logData(req);
     try {
         const { contactKey, journeyId, payload } = req.body;
+        console.log(contactKey);
+        console.log(journeyId);
+        console.log(payload);
         const token = await retrieveToken();
         await triggerJourney(token, contactKey, journeyId, payload);
         res.status(200).send('Execute');
