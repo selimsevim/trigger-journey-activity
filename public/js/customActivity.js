@@ -16,6 +16,8 @@ define(['postmonger'], function (Postmonger) {
     });
 
     function onRender() {
+        localStorage.removeItem('journeys');
+        localStorage.removeItem('selectedJourneyId');
         connection.trigger('ready');
         connection.trigger('requestTokens');
         connection.trigger('requestEndpoints');
