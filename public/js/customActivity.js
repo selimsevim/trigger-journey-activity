@@ -16,9 +16,6 @@ define(['postmonger'], function (Postmonger) {
     });
 
     function onRender() {
-        // Clear session storage at the start of each render
-        sessionStorage.removeItem('journeys');
-        sessionStorage.removeItem('selectedJourneyId');
 
         connection.trigger('ready');
         connection.trigger('requestTokens');
