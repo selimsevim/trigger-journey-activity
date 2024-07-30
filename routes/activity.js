@@ -35,10 +35,17 @@ exports.save = async function (req, res) {
 exports.execute = async function (req, res) {
     logData(req);
     try {
-        console.log("test");
-        console.log(req.body);
-        console.log("test");
-        const { contactKey, journeyId, payload } = req.body;
+        console.log("Request Body:", req.body);
+
+        const inArguments = req.body.inArguments[0]; // Extract the first item in inArguments array
+        const contactKey = inArguments.contactKey;
+        const journeyId = inArguments.selectedJourneyId;
+        const payload = inArguments.schema;
+
+        console.log("Extracted ContactKey:", contactKey);
+        console.log("Extracted JourneyId:", journeyId);
+        console.log("Extracted Payload:", payload);
+
         const token = await retrieveToken();
         await triggerJourney(token, contactKey, journeyId, payload);
         res.status(200).send('Execute');
