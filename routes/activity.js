@@ -43,7 +43,7 @@ exports.execute = async function (req, res) {
         const data = inArguments.payload;
 
         console.log("Extracted ContactKey:", contactKey);
-        console.log("Extracted JourneyId:", journeyId);
+        console.log("Extracted JourneyId:", APIEventKey);
         console.log("Extracted Data:", data);
 
         const token = await retrieveToken();
