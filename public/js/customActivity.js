@@ -59,7 +59,7 @@ define(['postmonger'], function (Postmonger) {
         payload.arguments.execute.inArguments = [
             {
                 contactKey: '{{Contact.Key}}',
-                selectedJourneyId: selectedJourneyId || null,
+                selectedJourneyAPIEventKey: apiEventKey,
                 payload: entrySourceData
             }
         ];

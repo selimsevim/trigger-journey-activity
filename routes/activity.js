@@ -39,7 +39,7 @@ exports.execute = async function (req, res) {
 
         const inArguments = req.body.inArguments[0]; // Extract the first item in inArguments array
         const contactKey = inArguments.contactKey;
-        const journeyId = inArguments.selectedJourneyId;
+        const APIEventKey = inArguments.selectedJourneyAPIEventKey;
         const data = inArguments.payload;
 
         console.log("Extracted ContactKey:", contactKey);
@@ -47,7 +47,7 @@ exports.execute = async function (req, res) {
         console.log("Extracted Data:", data);
 
         const token = await retrieveToken();
-        await triggerJourney(token, contactKey, journeyId, data);
+        await triggerJourney(token, contactKey, APIEventKey, data);
         res.status(200).send('Execute');
     } catch (error) {
         console.error('Error executing journey:', error);
@@ -90,11 +90,11 @@ async function retrieveToken() {
 /*
  * Function to trigger a journey
  */
-async function triggerJourney(token, contactKey, journeyId, data) {
+async function triggerJourney(token, contactKey, APIEventKey, data) {
     const triggerUrl = `${process.env.restBaseURL}/interaction/v1/events`;
     const eventPayload = {
         ContactKey: contactKey,
-        EventDefinitionKey: journeyId,
+        EventDefinitionKey: APIEventKey,
         Data: data
     };
     try {
