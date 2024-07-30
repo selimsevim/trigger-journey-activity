@@ -1,19 +1,20 @@
 define(['postmonger'], function (Postmonger) {
     'use strict';
 
-    let connection = new Postmonger.Session();
-    let payload = {};
-    let schema = {};
-    let journeys = [];
-    let currentApiEventKey = null;
-    let activityId = null;
+    var connection = new Postmonger.Session();
+    var payload = {};
+    var journeys = [];
+    var currentApiEventKey = null;
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
     connection.on('clickedNext', save);
     connection.on('requestedSchema', function(data) {
-        schema = data['schema'];
-        console.log('Schema:', schema);
+        payload['arguments'] = payload['arguments'] || {};
+        payload['arguments'].execute = payload['arguments'].execute || {};
+        payload['arguments'].execute.inArguments = payload['arguments'].execute.inArguments || [];
+        payload['arguments'].execute.inArguments[0] = payload['arguments'].execute.inArguments[0] || {};
+        payload['arguments'].execute.inArguments[0].schema = data['schema'];
     });
 
     function onRender() {
@@ -32,32 +33,41 @@ define(['postmonger'], function (Postmonger) {
     function initialize(data) {
         if (data) {
             payload = data;
-            activityId = payload.metaData.activityId;
         }
+
+        var hasInArguments = Boolean(
+            payload.arguments &&
+            payload.arguments.execute &&
+            payload.arguments.execute.inArguments &&
+            payload.arguments.execute.inArguments.length > 0
+        );
+
+        var inArguments = hasInArguments ? payload.arguments.execute.inArguments : [];
+
+        var selectedJourneyId = null;
+        if (inArguments.length > 0) {
+            selectedJourneyId = inArguments[0].selectedJourneyId;
+        }
+
         connection.trigger('requestSchema');
-        if (payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments) {
-            const selectedJourneyId = payload.arguments.execute.inArguments.find(arg => arg.journeyId).journeyId;
-            fetchJourneys(selectedJourneyId);
-        } else {
-            fetchJourneys();
-        }
+        fetchJourneys(selectedJourneyId);
     }
 
     function save() {
-        let selectedJourneyId = $('input[name="journey"]:checked').val();
-        let selectedJourney = journeys.find(j => j.id === selectedJourneyId);
+        var selectedJourneyId = $('input[name="journey"]:checked').val();
+        var selectedJourney = journeys.find(j => j.id === selectedJourneyId);
 
         if (selectedJourney) {
-            payload['arguments'].execute.inArguments = [
+            payload.arguments.execute.inArguments = [
                 {
                     contactKey: '{{Contact.Key}}',
-                    journeyId: selectedJourney.id,
+                    selectedJourneyId: selectedJourney.id,
                     payload: schema
                 }
             ];
         }
 
-        payload['metaData'].isConfigured = true;
+        payload.metaData.isConfigured = true;
         connection.trigger('updateActivity', payload);
     }
 
@@ -97,20 +107,19 @@ define(['postmonger'], function (Postmonger) {
     }
 
     function populateJourneys(journeys, selectedJourneyId = null) {
-        let $checkboxGroup = $('#journey-checkboxes');
+        var $checkboxGroup = $('#journey-checkboxes');
         $checkboxGroup.empty();
         $checkboxGroup.append('<label>Select Journeys to Monitor:</label>');
 
         journeys.forEach(function (journey) {
-            let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).match(/APIEvent-([a-z0-9-]+)/)[0];
-            let $checkbox = $('<input>', {
+            var apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).match(/APIEvent-([a-z0-9-]+)/)[0];
+            var $checkbox = $('<input>', {
                 type: 'checkbox',
                 name: 'journey',
                 value: journey.id,
                 'data-api-event-key': apiEventKey
             });
 
-            // Check the checkbox if it matches the selected journey ID
             if (journey.id === selectedJourneyId) {
                 $checkbox.prop('checked', true);
             }
