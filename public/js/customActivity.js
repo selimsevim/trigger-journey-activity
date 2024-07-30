@@ -13,7 +13,6 @@ define(['postmonger'], function (Postmonger) {
     connection.on('requestedSchema', function(data) {
         schema = data['schema'];
         console.log('Schema:', schema);
-        console.log('Schema:', schema[0].value);
         addEntrySourceAttributesToInArguments(schema);
     });
 
@@ -47,14 +46,8 @@ define(['postmonger'], function (Postmonger) {
         var selectedJourneyId = null;
         if (inArguments.length > 0) {
             var selectedJourneyArg = inArguments.find(arg => arg.selectedJourneyId);
-            var schemaArg = inArguments.find(arg => arg.schema);
-
             if (selectedJourneyArg) {
                 selectedJourneyId = selectedJourneyArg.selectedJourneyId;
-            }
-
-            if (schemaArg) {
-                schema = schemaArg.schema || {};
             }
         }
 
@@ -68,10 +61,11 @@ define(['postmonger'], function (Postmonger) {
         payload.arguments.execute.inArguments = [
             {
                 contactKey: '{{Contact.Key}}',
-                selectedJourneyId: selectedJourneyId || null,
-                schema: schema
+                selectedJourneyId: selectedJourneyId || null
             }
         ];
+
+        addEntrySourceAttributesToInArguments(schema);
 
         payload.metaData.isConfigured = true;
         connection.trigger('updateActivity', payload);
@@ -138,11 +132,18 @@ define(['postmonger'], function (Postmonger) {
     }
 
     function addEntrySourceAttributesToInArguments(schema) {
+        if (!payload.arguments.execute.inArguments) {
+            payload.arguments.execute.inArguments = [];
+        }
+
         for (var i = 0; i < schema.length; i++) {
+            var attr = schema[i].key;
+            var keyIndex = attr.lastIndexOf('.') + 1;
+            var fieldName = attr.substring(keyIndex);
+            var fieldValue = '{{' + attr + '}}';
+
             var inArg = {};
-            let attr = schema[i].key;
-            let keyIndex = attr.lastIndexOf('.') + 1;
-            inArg[attr.substring(keyIndex)] = '{{' + attr + '}}';
+            inArg[fieldName] = fieldValue;
             payload.arguments.execute.inArguments.push(inArg);
         }
     }
