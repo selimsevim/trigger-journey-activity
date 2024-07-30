@@ -35,6 +35,8 @@ exports.save = async function (req, res) {
 exports.execute = async function (req, res) {
     logData(req);
     try {
+        console.log("test");
+        console.log(req.body);
         const { contactKey, journeyId, payload } = req.body;
         const token = await retrieveToken();
         await triggerJourney(token, contactKey, journeyId, payload);
@@ -82,7 +84,6 @@ async function retrieveToken() {
  */
 async function triggerJourney(token, contactKey, journeyId, payload) {
     const triggerUrl = `${process.env.restBaseURL}/interaction/v1/events`;
-    console.log("test1");
     console.log(contactKey);
     console.log(journeyId);
     console.log(payload);
