@@ -45,8 +45,16 @@ define(['postmonger'], function (Postmonger) {
 
         var selectedJourneyId = null;
         if (inArguments.length > 0) {
-            selectedJourneyId = inArguments.find(arg => arg.selectedJourneyId).selectedJourneyId;
-            schema = inArguments.find(arg => arg.schema).schema || {};
+            var selectedJourneyArg = inArguments.find(arg => arg.selectedJourneyId);
+            var schemaArg = inArguments.find(arg => arg.schema);
+
+            if (selectedJourneyArg) {
+                selectedJourneyId = selectedJourneyArg.selectedJourneyId;
+            }
+
+            if (schemaArg) {
+                schema = schemaArg.schema || {};
+            }
         }
 
         connection.trigger('requestSchema');
