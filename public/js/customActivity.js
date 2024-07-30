@@ -54,17 +54,14 @@ define(['postmonger'], function (Postmonger) {
 
     function save() {
         var selectedJourneyId = $('input[name="journey"]:checked').val();
-        var selectedJourney = journeys.find(j => j.id === selectedJourneyId);
 
-        if (selectedJourney) {
-            payload.arguments.execute.inArguments = [
-                {
-                    contactKey: '{{Contact.Key}}',
-                    selectedJourneyId: selectedJourney.id,
-                    schema: schema
-                }
-            ];
-        }
+        payload.arguments.execute.inArguments = [
+            {
+                contactKey: '{{Contact.Key}}',
+                selectedJourneyId: selectedJourneyId || null,
+                schema: schema
+            }
+        ];
 
         payload.metaData.isConfigured = true;
         connection.trigger('updateActivity', payload);
