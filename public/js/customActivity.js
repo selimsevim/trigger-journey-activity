@@ -6,6 +6,7 @@ define(['postmonger'], function (Postmonger) {
     let schema = {};
     let journeys = [];
     let currentApiEventKey = null;
+    let activityId = null;
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -16,7 +17,6 @@ define(['postmonger'], function (Postmonger) {
     });
 
     function onRender() {
-
         connection.trigger('ready');
         connection.trigger('requestTokens');
         connection.trigger('requestEndpoints');
@@ -32,10 +32,11 @@ define(['postmonger'], function (Postmonger) {
     function initialize(data) {
         if (data) {
             payload = data;
+            activityId = payload.metaData.activityId;
         }
         connection.trigger('requestSchema');
-        const storedJourneys = sessionStorage.getItem('journeys');
-        const selectedJourneyId = sessionStorage.getItem('selectedJourneyId');
+        const storedJourneys = sessionStorage.getItem('journeys_' + activityId);
+        const selectedJourneyId = sessionStorage.getItem('selectedJourneyId_' + activityId);
 
         if (storedJourneys) {
             journeys = JSON.parse(storedJourneys);
@@ -48,7 +49,6 @@ define(['postmonger'], function (Postmonger) {
     function save() {
         let selectedJourneyId = $('input[name="journey"]:checked').val();
         let selectedJourney = journeys.find(j => j.id === selectedJourneyId);
-        console.log(selectedJourney);
 
         if (selectedJourney) {
             payload['arguments'].execute.inArguments = [
@@ -59,7 +59,7 @@ define(['postmonger'], function (Postmonger) {
                 }
             ];
             // Save the selected journey ID to session storage
-            sessionStorage.setItem('selectedJourneyId', selectedJourney.id);
+            sessionStorage.setItem('selectedJourneyId_' + activityId, selectedJourney.id);
         }
 
         payload['metaData'].isConfigured = true;
@@ -89,11 +89,11 @@ define(['postmonger'], function (Postmonger) {
                 if (journeys.length === 0) {
                     $('#loading-message').text('No journeys with API Event entry source was found.');
                 } else {
-                    const selectedJourneyId = sessionStorage.getItem('selectedJourneyId');
+                    const selectedJourneyId = sessionStorage.getItem('selectedJourneyId_' + activityId);
                     populateJourneys(journeys, selectedJourneyId);
                     $('#loading-message').hide();
                     $('#journey-checkboxes').show();
-                    sessionStorage.setItem('journeys', JSON.stringify(journeys));
+                    sessionStorage.setItem('journeys_' + activityId, JSON.stringify(journeys));
                 }
             },
             error: function (xhr, status, error) {
@@ -109,7 +109,7 @@ define(['postmonger'], function (Postmonger) {
         $checkboxGroup.append('<label>Select Journeys to Monitor:</label>');
 
         journeys.forEach(function (journey) {
-            let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
+            let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).match(/APIEvent-([a-z0-9-]+)/)[0];
             let $checkbox = $('<input>', {
                 type: 'checkbox',
                 name: 'journey',
