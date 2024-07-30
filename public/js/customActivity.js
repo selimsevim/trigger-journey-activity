@@ -44,7 +44,7 @@ define(['postmonger'], function (Postmonger) {
     }
   });
 
-  let argArr = payload['arguments'].execute.inArguments;
+  const argArr = payload['arguments'].execute.inArguments;
 
         var hasInArguments = Boolean(
             payload.arguments &&
