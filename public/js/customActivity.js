@@ -35,12 +35,9 @@ define(['postmonger'], function (Postmonger) {
             activityId = payload.metaData.activityId;
         }
         connection.trigger('requestSchema');
-        const storedJourneys = sessionStorage.getItem('journeys_' + activityId);
-        const selectedJourneyId = sessionStorage.getItem('selectedJourneyId_' + activityId);
-
-        if (storedJourneys) {
-            journeys = JSON.parse(storedJourneys);
-            populateJourneys(journeys, selectedJourneyId);
+        if (payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments) {
+            const selectedJourneyId = payload.arguments.execute.inArguments.find(arg => arg.journeyId).journeyId;
+            fetchJourneys(selectedJourneyId);
         } else {
             fetchJourneys();
         }
@@ -58,15 +55,13 @@ define(['postmonger'], function (Postmonger) {
                     payload: schema
                 }
             ];
-            // Save the selected journey ID to session storage
-            sessionStorage.setItem('selectedJourneyId_' + activityId, selectedJourney.id);
         }
 
         payload['metaData'].isConfigured = true;
         connection.trigger('updateActivity', payload);
     }
 
-    function fetchJourneys() {
+    function fetchJourneys(selectedJourneyId = null) {
         $.ajax({
             url: '/journeys',
             type: 'GET',
@@ -89,11 +84,9 @@ define(['postmonger'], function (Postmonger) {
                 if (journeys.length === 0) {
                     $('#loading-message').text('No journeys with API Event entry source was found.');
                 } else {
-                    const selectedJourneyId = sessionStorage.getItem('selectedJourneyId_' + activityId);
                     populateJourneys(journeys, selectedJourneyId);
                     $('#loading-message').hide();
                     $('#journey-checkboxes').show();
-                    sessionStorage.setItem('journeys_' + activityId, JSON.stringify(journeys));
                 }
             },
             error: function (xhr, status, error) {
