@@ -7,6 +7,7 @@ define(['postmonger'], function (Postmonger) {
     var journeys = [];
     var currentApiEventKey = null;
     var entrySourceData = [];
+    var apiEventKeyMap = {}; // Map to store apiEventKey for each journey
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -55,11 +56,12 @@ define(['postmonger'], function (Postmonger) {
 
     function save() {
         var selectedJourneyId = $('input[name="journey"]:checked').val();
+        var selectedApiEventKey = apiEventKeyMap[selectedJourneyId]; // Retrieve the apiEventKey from the map
 
         payload.arguments.execute.inArguments = [
             {
                 contactKey: '{{Contact.Key}}',
-                selectedJourneyAPIEventKey: apiEventKey,
+                selectedJourneyAPIEventKey: selectedApiEventKey || null,
                 payload: entrySourceData
             }
         ];
@@ -82,6 +84,7 @@ define(['postmonger'], function (Postmonger) {
                         let apiEventEmail = journey.defaults.email.find(email => email.includes('APIEvent'));
                         if (apiEventEmail) {
                             let apiEventKey = apiEventEmail.match(/APIEvent-([a-z0-9-]+)/)[0];
+                            apiEventKeyMap[journey.id] = apiEventKey; // Store the apiEventKey in the map
                             return apiEventKey !== currentApiEventKey;
                         }
                     }
@@ -108,12 +111,12 @@ define(['postmonger'], function (Postmonger) {
         $radioGroup.empty();
 
         journeys.forEach(function (journey) {
-            var apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).match(/APIEvent-([a-z0-9-]+)/)[0];
+            var apiEventKey = apiEventKeyMap[journey.id];
             var $radio = $('<input>', {
                 type: 'radio',
                 name: 'journey',
                 value: journey.id,
-                'data-api-event-key': apiEventKey
+                'data-api-event-key': apiEventKey // Add apiEventKey as a data attribute
             });
 
             if (journey.id === selectedJourneyId) {
