@@ -82,6 +82,7 @@ async function retrieveToken() {
  */
 async function triggerJourney(token, contactKey, journeyId, payload) {
     const triggerUrl = `${process.env.restBaseURL}/interaction/v1/events`;
+    console.log("test1");
     console.log(contactKey);
     console.log(journeyId);
     console.log(payload);
