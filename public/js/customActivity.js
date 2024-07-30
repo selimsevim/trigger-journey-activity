@@ -16,6 +16,9 @@ define(['postmonger'], function (Postmonger) {
     });
 
     function onRender() {
+        // Clear session storage at the start of each render
+        sessionStorage.removeItem('journeys');
+        sessionStorage.removeItem('selectedJourneyId');
 
         connection.trigger('ready');
         connection.trigger('requestTokens');
@@ -100,4 +103,33 @@ define(['postmonger'], function (Postmonger) {
                 console.error('Error fetching journeys:', error);
                 $('#loading-message').text('Error loading journeys. Please try again.');
             }
-    
+        });
+    }
+
+    function populateJourneys(journeys, selectedJourneyId = null) {
+        let $checkboxGroup = $('#journey-checkboxes');
+        $checkboxGroup.empty();
+        $checkboxGroup.append('<label>Select Journeys to Monitor:</label>');
+
+        journeys.forEach(function (journey) {
+            let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
+            let $checkbox = $('<input>', {
+                type: 'checkbox',
+                name: 'journey',
+                value: journey.id,
+                'data-api-event-key': apiEventKey
+            });
+
+            // Check the checkbox if it matches the selected journey ID
+            if (journey.id === selectedJourneyId) {
+                $checkbox.prop('checked', true);
+            }
+
+            $checkboxGroup.append(
+                $('<label>', {
+                    text: journey.name
+                }).prepend($checkbox)
+            );
+        });
+    }
+});
