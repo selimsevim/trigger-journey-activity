@@ -16,8 +16,7 @@ define(['postmonger'], function (Postmonger) {
     });
 
     function onRender() {
-        localStorage.removeItem('journeys');
-        localStorage.removeItem('selectedJourneyId');
+
         connection.trigger('ready');
         connection.trigger('requestTokens');
         connection.trigger('requestEndpoints');
@@ -35,8 +34,8 @@ define(['postmonger'], function (Postmonger) {
             payload = data;
         }
         connection.trigger('requestSchema');
-        const storedJourneys = localStorage.getItem('journeys');
-        const selectedJourneyId = localStorage.getItem('selectedJourneyId');
+        const storedJourneys = sessionStorage.getItem('journeys');
+        const selectedJourneyId = sessionStorage.getItem('selectedJourneyId');
 
         if (storedJourneys) {
             journeys = JSON.parse(storedJourneys);
@@ -59,8 +58,8 @@ define(['postmonger'], function (Postmonger) {
                     payload: schema
                 }
             ];
-            // Save the selected journey ID to local storage
-            localStorage.setItem('selectedJourneyId', selectedJourney.id);
+            // Save the selected journey ID to session storage
+            sessionStorage.setItem('selectedJourneyId', selectedJourney.id);
         }
 
         payload['metaData'].isConfigured = true;
@@ -90,43 +89,15 @@ define(['postmonger'], function (Postmonger) {
                 if (journeys.length === 0) {
                     $('#loading-message').text('No journeys with API Event entry source was found.');
                 } else {
-                    populateJourneys(journeys);
+                    const selectedJourneyId = sessionStorage.getItem('selectedJourneyId');
+                    populateJourneys(journeys, selectedJourneyId);
                     $('#loading-message').hide();
                     $('#journey-checkboxes').show();
-                    localStorage.setItem('journeys', JSON.stringify(journeys));
+                    sessionStorage.setItem('journeys', JSON.stringify(journeys));
                 }
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching journeys:', error);
                 $('#loading-message').text('Error loading journeys. Please try again.');
             }
-        });
-    }
-
-    function populateJourneys(journeys, selectedJourneyId = null) {
-        let $checkboxGroup = $('#journey-checkboxes');
-        $checkboxGroup.empty();
-        $checkboxGroup.append('<label>Select Journeys to Monitor:</label>');
-
-        journeys.forEach(function (journey) {
-            let apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).split('"')[1].split('.')[1];
-            let $checkbox = $('<input>', {
-                type: 'checkbox',
-                name: 'journey',
-                value: journey.id,
-                'data-api-event-key': apiEventKey
-            });
-
-            // Check the checkbox if it matches the selected journey ID
-            if (journey.id === selectedJourneyId) {
-                $checkbox.prop('checked', true);
-            }
-
-            $checkboxGroup.append(
-                $('<label>', {
-                    text: journey.name
-                }).prepend($checkbox)
-            );
-        });
-    }
-});
+    
