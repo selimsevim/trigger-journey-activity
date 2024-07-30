@@ -10,10 +10,6 @@ define(['postmonger'], function (Postmonger) {
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
     connection.on('clickedNext', save);
-    connection.on('requestedSchema', function(data) {
-        schema = data['schema'];
-        console.log('Schema:', schema);
-    });
 
     function onRender() {
         connection.trigger('ready');
@@ -33,6 +29,28 @@ define(['postmonger'], function (Postmonger) {
             payload = data;
         }
 
+        connection.trigger('requestSchema');
+        connection.on('requestedSchema', function (data) {
+
+    // add entry source attributes as inArgs
+        const schema = data['schema'];
+
+    for (var i = 0, l = schema.length; i < l; i++) {
+        var inArg = {};
+        let attr = schema[i].key;
+        let keyIndex = attr.lastIndexOf('.') + 1;
+        inArg[attr.substring(keyIndex)] = '{{' + attr + '}}';
+        payload['arguments'].execute.inArguments.push(inArg);
+    }
+  });
+
+  let argArr = payload['arguments'].execute.inArguments;
+
+console.log("argArr)";
+  console.log(argArr);
+  
+console.log("argArr)";
+
         var hasInArguments = Boolean(
             payload.arguments &&
             payload.arguments.execute &&
@@ -48,12 +66,13 @@ define(['postmonger'], function (Postmonger) {
             schema = inArguments[0].schema || {};
         }
 
-        connection.trigger('requestSchema');
         fetchJourneys(selectedJourneyId);
     }
 
     function save() {
         var selectedJourneyId = $('input[name="journey"]:checked').val();
+
+
 
         payload.arguments.execute.inArguments = [
             {
