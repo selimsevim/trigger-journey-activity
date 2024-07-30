@@ -73,7 +73,7 @@ define(['postmonger'], function (Postmonger) {
             type: 'GET',
             beforeSend: function() {
                 $('#loading-message').show();
-                $('#journey-checkboxes').hide();
+                $('#journey-radios').hide();
             },
             success: function (response) {
                 journeys = response.items.filter(journey => {
@@ -92,7 +92,7 @@ define(['postmonger'], function (Postmonger) {
                 } else {
                     populateJourneys(journeys, selectedJourneyId);
                     $('#loading-message').hide();
-                    $('#journey-checkboxes').show();
+                    $('#journey-radios').show();
                 }
             },
             error: function (xhr, status, error) {
@@ -103,27 +103,27 @@ define(['postmonger'], function (Postmonger) {
     }
 
     function populateJourneys(journeys, selectedJourneyId = null) {
-        var $checkboxGroup = $('#journey-checkboxes');
-        $checkboxGroup.empty();
-        $checkboxGroup.append('<label>Select Journeys to Monitor:</label>');
+        var $radioGroup = $('#journey-radios');
+        $radioGroup.empty();
+        $radioGroup.append('<label>Select Journeys to Monitor:</label>');
 
         journeys.forEach(function (journey) {
             var apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).match(/APIEvent-([a-z0-9-]+)/)[0];
-            var $checkbox = $('<input>', {
-                type: 'checkbox',
+            var $radio = $('<input>', {
+                type: 'radio',
                 name: 'journey',
                 value: journey.id,
                 'data-api-event-key': apiEventKey
             });
 
             if (journey.id === selectedJourneyId) {
-                $checkbox.prop('checked', true);
+                $radio.prop('checked', true);
             }
 
-            $checkboxGroup.append(
+            $radioGroup.append(
                 $('<label>', {
                     text: journey.name
-                }).prepend($checkbox)
+                }).prepend($radio)
             );
         });
     }
