@@ -35,19 +35,21 @@ exports.save = async function (req, res) {
 exports.execute = async function (req, res) {
     logData(req);
     try {
-        console.log("Request Body:", req.body);
+        console.log('Request Body:', req.body);
 
         const inArguments = req.body.inArguments[0]; // Extract the first item in inArguments array
         const contactKey = inArguments.contactKey;
         const journeyId = inArguments.selectedJourneyId;
-        const payload = inArguments.schema;
+        const schema = inArguments.schema;
 
-        console.log("Extracted ContactKey:", contactKey);
-        console.log("Extracted JourneyId:", journeyId);
-        console.log("Extracted Payload:", payload);
+        const data = convertSchemaToData(schema);
+
+        console.log('Extracted ContactKey:', contactKey);
+        console.log('Extracted JourneyId:', journeyId);
+        console.log('Extracted Data:', data);
 
         const token = await retrieveToken();
-        await triggerJourney(token, contactKey, journeyId, payload);
+        await triggerJourney(token, contactKey, journeyId, data);
         res.status(200).send('Execute');
     } catch (error) {
         console.error('Error executing journey:', error);
@@ -111,6 +113,19 @@ async function triggerJourney(token, contactKey, journeyId, payload) {
         console.error('Error triggering journey:', error);
         throw error;
     }
+}
+
+/*
+ * Function to convert schema to data
+ */
+function convertSchemaToData(schema) {
+    const data = {};
+    for (const field of schema) {
+        const fieldName = field.name;
+        const fieldKey = `{{${field.key}}}`;
+        data[fieldName] = fieldKey;
+    }
+    return data;
 }
 
 /*

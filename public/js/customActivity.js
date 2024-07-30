@@ -13,7 +13,6 @@ define(['postmonger'], function (Postmonger) {
     connection.on('requestedSchema', function(data) {
         schema = data['schema'];
         console.log('Schema:', schema);
-        addEntrySourceAttributesToInArguments(schema);
     });
 
     function onRender() {
@@ -45,10 +44,8 @@ define(['postmonger'], function (Postmonger) {
 
         var selectedJourneyId = null;
         if (inArguments.length > 0) {
-            var selectedJourneyArg = inArguments.find(arg => arg.selectedJourneyId);
-            if (selectedJourneyArg) {
-                selectedJourneyId = selectedJourneyArg.selectedJourneyId;
-            }
+            selectedJourneyId = inArguments[0].selectedJourneyId;
+            schema = inArguments[0].schema || {};
         }
 
         connection.trigger('requestSchema');
@@ -61,11 +58,10 @@ define(['postmonger'], function (Postmonger) {
         payload.arguments.execute.inArguments = [
             {
                 contactKey: '{{Contact.Key}}',
-                selectedJourneyId: selectedJourneyId || null
+                selectedJourneyId: selectedJourneyId || null,
+                schema: schema
             }
         ];
-
-        addEntrySourceAttributesToInArguments(schema);
 
         payload.metaData.isConfigured = true;
         connection.trigger('updateActivity', payload);
@@ -129,22 +125,5 @@ define(['postmonger'], function (Postmonger) {
                 }).prepend($radio)
             );
         });
-    }
-
-    function addEntrySourceAttributesToInArguments(schema) {
-        if (!payload.arguments.execute.inArguments) {
-            payload.arguments.execute.inArguments = [];
-        }
-
-        for (var i = 0; i < schema.length; i++) {
-            var attr = schema[i].key;
-            var keyIndex = attr.lastIndexOf('.') + 1;
-            var fieldName = attr.substring(keyIndex);
-            var fieldValue = '{{' + attr + '}}';
-
-            var inArg = {};
-            inArg[fieldName] = fieldValue;
-            payload.arguments.execute.inArguments.push(inArg);
-        }
     }
 });
