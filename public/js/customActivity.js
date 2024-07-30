@@ -3,6 +3,7 @@ define(['postmonger'], function (Postmonger) {
 
     var connection = new Postmonger.Session();
     var payload = {};
+    var schema = {};
     var journeys = [];
     var currentApiEventKey = null;
 
@@ -10,11 +11,8 @@ define(['postmonger'], function (Postmonger) {
     connection.on('initActivity', initialize);
     connection.on('clickedNext', save);
     connection.on('requestedSchema', function(data) {
-        payload['arguments'] = payload['arguments'] || {};
-        payload['arguments'].execute = payload['arguments'].execute || {};
-        payload['arguments'].execute.inArguments = payload['arguments'].execute.inArguments || [];
-        payload['arguments'].execute.inArguments[0] = payload['arguments'].execute.inArguments[0] || {};
-        payload['arguments'].execute.inArguments[0].schema = data['schema'];
+        schema = data['schema'];
+        console.log('Schema:', schema);
     });
 
     function onRender() {
@@ -47,6 +45,7 @@ define(['postmonger'], function (Postmonger) {
         var selectedJourneyId = null;
         if (inArguments.length > 0) {
             selectedJourneyId = inArguments[0].selectedJourneyId;
+            schema = inArguments[0].schema || {};
         }
 
         connection.trigger('requestSchema');
@@ -62,7 +61,7 @@ define(['postmonger'], function (Postmonger) {
                 {
                     contactKey: '{{Contact.Key}}',
                     selectedJourneyId: selectedJourney.id,
-                    payload: schema
+                    schema: schema
                 }
             ];
         }
@@ -92,7 +91,7 @@ define(['postmonger'], function (Postmonger) {
                 });
 
                 if (journeys.length === 0) {
-                    $('#loading-message').text('No journeys with API Event entry source was found.');
+                    $('#loading-message').text('No journeys with API Event entry source were found.');
                 } else {
                     populateJourneys(journeys, selectedJourneyId);
                     $('#loading-message').hide();
