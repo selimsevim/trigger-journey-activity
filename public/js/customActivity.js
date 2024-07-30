@@ -39,6 +39,7 @@ define(['postmonger'], function (Postmonger) {
     function save() {
         let selectedJourneyId = $('input[name="journey"]:checked').val();
         let selectedJourney = journeys.find(j => j.id === selectedJourneyId);
+        console.log(selectedJourney);
 
         if (selectedJourney) {
             payload['arguments'].execute.inArguments = [

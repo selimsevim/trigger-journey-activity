@@ -1,90 +1,64 @@
 {
-  "workflowApiVersion": "1.1",
-  "metaData": {
-    "icon": "images/icon.png",
-    "iconSmall": "images/iconSmall.png",
-    "category": "message"
-  },
-  "type": "REST",
-  "lang": {
-    "en-US": {
-      "name": "Journey Trigger Activity",
-      "description": "Activity to trigger a journey based on another journey",
-      "step1Label": "Configure Activity"
-    }
-  },
-  "arguments": {
-    "execute": {
-      "inArguments": [
+    "workflowApiVersion": "1.1",
+    "metaData":
+    {
+        "icon": "images/icon.png",
+        "iconSmall": "images/iconSmall.png",
+        "category": "<CATEGORY_OF_APP_BASED_ON_DOCS>"
+    },
+
+    "type": "REST",
+    "lang":
+    {
+        "en-US":
         {
-          "contactKey": "{{Contact.Key}}"
-        },
-        {
-          "journeyId": "{{Activity.journeyId}}"
-        },
-        {
-          "payload": "{{Activity.payload}}"
+            "name": "asdsadsa",
+            "description": "<DESC_OF_APP>",
+            "step1Label": "Configure Activity"
         }
-      ],
-      "outArguments": [],
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/execute",
-      "verb": "POST",
-      "body": "",
-      "header": "",
-      "format": "json",
-      "useJwt": true,
-      "timeout": 10000
-    }
-  },
-  "configurationArguments": {
-    "save": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/save",
-      "verb": "POST"
     },
-    "publish": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/publish",
-      "verb": "POST"
+
+
+    
+    "configurationArguments":
+    {
+        "applicationExtensionKey": "",
+        "save":
+        {
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/save",
+            "verb": "POST"
+        },
+        "publish":
+        {
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/publish",
+            "verb": "POST"
+        },
+        "stop":
+        {
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/stop",
+            "verb": "POST"
+        },
+        "validate":
+        {
+            "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/validate",
+            "verb": "POST"
+        }
     },
-    "stop": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/stop",
-      "verb": "POST"
+    "userInterfaces":
+    {
+        "configModal": {
+            "height": 500,
+            "width": 500,
+            "fullscreen": false
+        }
     },
-    "validate": {
-      "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/validate",
-      "verb": "POST"
-    }
-  },
-  "userInterfaces": {
-    "configModal": {
-      "height": 500,
-      "width": 500,
-      "fullscreen": false
-    }
-  },
-  "schema": {
-    "arguments": {
-      "execute": {
-        "inArguments": [
-          {
-            "contactKey": {
-              "dataType": "Text",
-              "isNullable": false,
-              "direction": "in"
-            },
-            "journeyId": {
-              "dataType": "Text",
-              "isNullable": false,
-              "direction": "in"
-            },
-            "payload": {
-              "dataType": "Text",
-              "isNullable": false,
-              "direction": "in"
+    "schema": 
+    {
+        "arguments":{
+            "execute": {
+                "inArguments": [],
+                "outArguments": []
             }
-          }
-        ],
-        "outArguments": []
-      }
+        }
     }
-  }
 }
