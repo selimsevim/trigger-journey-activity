@@ -105,7 +105,6 @@ define(['postmonger'], function (Postmonger) {
     function populateJourneys(journeys, selectedJourneyId = null) {
         var $radioGroup = $('#journey-radios');
         $radioGroup.empty();
-        $radioGroup.append('<label>Select Journeys to Monitor:</label>');
 
         journeys.forEach(function (journey) {
             var apiEventKey = journey.defaults.email.find(email => email.includes('APIEvent')).match(/APIEvent-([a-z0-9-]+)/)[0];
