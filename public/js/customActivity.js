@@ -13,6 +13,7 @@ define(['postmonger'], function (Postmonger) {
     connection.on('requestedSchema', function(data) {
         schema = data['schema'];
         console.log('Schema:', schema);
+        addEntrySourceAttributesToInArguments(schema);
     });
 
     function onRender() {
@@ -44,8 +45,8 @@ define(['postmonger'], function (Postmonger) {
 
         var selectedJourneyId = null;
         if (inArguments.length > 0) {
-            selectedJourneyId = inArguments[0].selectedJourneyId;
-            schema = inArguments[0].schema || {};
+            selectedJourneyId = inArguments.find(arg => arg.selectedJourneyId).selectedJourneyId;
+            schema = inArguments.find(arg => arg.schema).schema || {};
         }
 
         connection.trigger('requestSchema');
@@ -125,5 +126,15 @@ define(['postmonger'], function (Postmonger) {
                 }).prepend($radio)
             );
         });
+    }
+
+    function addEntrySourceAttributesToInArguments(schema) {
+        for (var i = 0; i < schema.length; i++) {
+            var inArg = {};
+            let attr = schema[i].key;
+            let keyIndex = attr.lastIndexOf('.') + 1;
+            inArg[attr.substring(keyIndex)] = '{{' + attr + '}}';
+            payload.arguments.execute.inArguments.push(inArg);
+        }
     }
 });
