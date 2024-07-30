@@ -46,11 +46,6 @@ define(['postmonger'], function (Postmonger) {
 
   let argArr = payload['arguments'].execute.inArguments;
 
-console.log("argArr");
-  console.log(argArr);
-
-console.log("argArr");
-
         var hasInArguments = Boolean(
             payload.arguments &&
             payload.arguments.execute &&
@@ -78,7 +73,7 @@ console.log("argArr");
             {
                 contactKey: '{{Contact.Key}}',
                 selectedJourneyId: selectedJourneyId || null,
-                schema: schema
+                schema: argArr
             }
         ];
 
