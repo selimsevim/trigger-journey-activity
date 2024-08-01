@@ -4,7 +4,7 @@
     {
         "icon": "images/icon.png",
         "iconSmall": "images/iconSmall.png",
-        "backgroundColor": "#fe9339",
+        "backgroundColor": "#bb9b26",
         "category": "<CATEGORY_OF_APP_BASED_ON_DOCS>"
     },
 
@@ -72,17 +72,6 @@
                 "inArguments": [],
                 "outArguments": []
             }
-        }
-   },
-    "style": {
-        "default": {
-            "backgroundColor": "#fe9339"
-        },
-        "selected": {
-            "backgroundColor": "#fe9339"
-        },
-        "dragged": {
-            "backgroundColor": "#fe9339"
         }
     }
 }
