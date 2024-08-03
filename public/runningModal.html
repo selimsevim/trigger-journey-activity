@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Running Journey</title>
+    <title>Running Modal</title>
     <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie-edge" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <link rel='stylesheet' href="css/styles.css">
-    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="js/require.js"></script>
     <script type="text/javascript">
@@ -17,16 +14,14 @@
                 baseUrl: 'js'
             };
             var dependencies = [
-                'runningModal'
+                'customActivity'
             ];
             require(config, dependencies);
         })();
     </script>
 </head>
-
 <body>
-    <h1>Selected Journey</h1>
-    <p id="selected-journey">Loading...</p>
+    <h1>Selected Journey Details</h1>
+    <div id="selected-journey">Loading...</div>
 </body>
-
 </html>
