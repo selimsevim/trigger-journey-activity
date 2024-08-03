@@ -21,7 +21,7 @@ define(['postmonger'], function (Postmonger) {
 
     function fetchResults(activityInstanceId) {
         $.ajax({
-            url: 'https://your-api-endpoint/getExecutionResults',
+            url: '/getExecutionResults',
             type: 'GET',
             data: { activityInstanceId: activityInstanceId },
             success: function(response) {
