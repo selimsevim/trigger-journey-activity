@@ -186,3 +186,7 @@ function getMockDatabase() {
     }
     return global.mockDatabase;
 }
+
+// Export functions
+exports.storeExecutionResult = storeExecutionResult;
+exports.getResultsFromDatabase = getResultsFromDatabase;
