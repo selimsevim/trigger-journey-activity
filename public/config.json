@@ -66,6 +66,9 @@
         },
         "runningModal": {
             "url": "runningModal.html"
+        },
+        "runningHover": {
+            "url": "runningHover.html"
         }
     },
     "schema": 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Running Modal</title>
+    <title>Journey Running Modal</title>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,14 +14,16 @@
                 baseUrl: 'js'
             };
             var dependencies = [
-                'customActivity'
+                'runningModal'
             ];
-            require(config, dependencies);
+            require(config, dependencies, function(runningModal) {
+                console.log('runningModal.html has been loaded');
+                runningModal.initialize();
+            });
         })();
     </script>
 </head>
 <body>
-    <h1>Selected Journey Details</h1>
-    <div id="selected-journey">Loading...</div>
+    <div id="selected-journey">No journey selected</div>
 </body>
 </html>
