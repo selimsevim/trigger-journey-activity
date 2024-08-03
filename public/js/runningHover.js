@@ -15,6 +15,6 @@ define(['postmonger'], function (Postmonger) {
         var inArguments = data.arguments.execute.inArguments;
         var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
 
-        $('#selected-journey').text(selectedJourneyName || 'No journey selected');
+        $('#selected-journey').text(selectedJourneyName || 'No journey selected2');
     }
 });
