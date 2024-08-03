@@ -148,6 +148,7 @@ define(['postmonger'], function (Postmonger) {
         if (data) {
             payload = data;
         }
+        console.log("selo");
 
         var inArguments = payload.arguments.execute.inArguments;
         var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;

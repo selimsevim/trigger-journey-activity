@@ -5,6 +5,7 @@ define(['postmonger'], function (Postmonger) {
 
     $(window).ready(onRender);
     connection.on('initActivityRunningModal', initialize);
+    console.log("selo2");
 
     function onRender() {
         connection.trigger('ready');
