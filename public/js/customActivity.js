@@ -57,7 +57,8 @@ define(['postmonger'], function (Postmonger) {
     function save() {
         var selectedJourneyId = $('input[name="journey"]:checked').val();
         var selectedApiEventKey = apiEventKeyMap[selectedJourneyId]; // Retrieve the apiEventKey from the map
-        var selectedJourneyName = $('input[name="journey"]:checked').siblings('label').text();
+        var selectedJourneyName = $('input[name="journey"]:checked').closest('label').text().trim();
+
         console.log(selectedJourneyName);
 
         payload.arguments.execute.inArguments = [
