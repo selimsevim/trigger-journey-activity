@@ -11,15 +11,33 @@ define(['postmonger'], function (Postmonger) {
     }
 
     function initialize(data) {
-        var inArguments = data.arguments.execute.inArguments;
-        var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
-        var executionResults = inArguments.find(arg => arg.executionResults).executionResults || [];
+        var activityInstanceId = data.activityInstanceId;
+        var selectedJourneyName = data.arguments.execute.inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
 
         $('#selected-journey').text(selectedJourneyName || 'No journey selected');
 
+        fetchResults(activityInstanceId);
+    }
+
+    function fetchResults(activityInstanceId) {
+        $.ajax({
+            url: 'https://your-api-endpoint/getExecutionResults',
+            type: 'GET',
+            data: { activityInstanceId: activityInstanceId },
+            success: function(response) {
+                displayResults(response.results);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching results:', error);
+                $('#selected-journey').append('<p>Error loading results. Please try again.</p>');
+            }
+        });
+    }
+
+    function displayResults(results) {
         var resultsTable = '<table><thead><tr><th>Contact Key</th><th>Status</th><th>Error Log</th></tr></thead><tbody>';
 
-        executionResults.forEach(result => {
+        results.forEach(result => {
             resultsTable += `<tr><td>${result.contactKey}</td><td>${result.status}</td><td>${result.errorLog}</td></tr>`;
         });
 

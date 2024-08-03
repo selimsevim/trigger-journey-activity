@@ -23,7 +23,6 @@ exports.save = async function (req, res) {
     try {
         const payload = req.body;
         // Save the journey ID and payload in your storage (e.g., database)
-        // This is a placeholder, replace it with actual storage logic
         await saveToDatabase(payload);
         res.status(200).send('Save');
     } catch (error) {
@@ -41,23 +40,29 @@ exports.execute = async function (req, res) {
         const contactKey = inArguments.contactKey;
         const APIEventKey = inArguments.selectedJourneyAPIEventKey;
         const data = inArguments.payload;
+        const activityInstanceId = req.body.activityInstanceId; // Get the activity instance ID
 
         console.log("Extracted ContactKey:", contactKey);
         console.log("Extracted JourneyId:", APIEventKey);
         console.log("Extracted Data:", data);
 
-        const result = await triggerJourney(token, contactKey, APIEventKey, data);
+        const token = await retrieveToken();
+        await triggerJourney(token, contactKey, APIEventKey, data);
 
-        // Store results in inArguments for retrieval in runningModal
-        inArguments.executionResults = inArguments.executionResults || [];
-        inArguments.executionResults.push(result);
-        
+        // Store success result in external storage
+        await storeExecutionResult(activityInstanceId, contactKey, 'Triggered', 'No Error');
+
         res.status(200).send('Execute');
     } catch (error) {
         console.error('Error executing journey:', error);
+
+        // Store error result in external storage
+        await storeExecutionResult(req.body.activityInstanceId, req.body.contactKey, 'Error', error.message);
+
         res.status(500).send('Error executing journey');
     }
 };
+
 
 exports.publish = function (req, res) {
     logData(req);
@@ -108,21 +113,11 @@ async function triggerJourney(token, contactKey, APIEventKey, data) {
                 'Content-Type': 'application/json'
             }
         });
-        return {
-            contactKey: contactKey,
-            status: 'Triggered',
-            errorLog: 'No Error'
-        };
     } catch (error) {
         console.error('Error triggering journey:', error);
-        return {
-            contactKey: contactKey,
-            status: 'Error',
-            errorLog: error.message
-        };
+        throw error;
     }
 }
-
 
 /*
  * GET Handler for /journeys route
@@ -159,10 +154,35 @@ async function fetchJourneys(token) {
 }
 
 /*
+ * Function to store execution results
+ */
+async function storeExecutionResult(activityInstanceId, contactKey, status, errorLog) {
+    const result = { contactKey, status, errorLog };
+    // Save the result to the database
+    await saveToDatabase(activityInstanceId, result);
+}
+
+/*
  * Placeholder function to simulate saving to a database
  */
-async function saveToDatabase(data) {
+async function saveToDatabase(activityInstanceId, result) {
     // Implement your database save logic here
-    console.log('Saving to database:', data);
-    return Promise.resolve();
+    // Example: using a simple array as a mock database
+    const db = getMockDatabase();
+    db.push({ activityInstanceId: activityInstanceId, result: result });
+}
+
+async function getResultsFromDatabase(activityInstanceId) {
+    // Implement your database retrieval logic here
+    // Example: using a simple array as a mock database
+    const db = getMockDatabase();
+    return db.filter(record => record.activityInstanceId === activityInstanceId).map(record => record.result);
+}
+
+function getMockDatabase() {
+    // Example: a simple in-memory database
+    if (!global.mockDatabase) {
+        global.mockDatabase = [];
+    }
+    return global.mockDatabase;
 }

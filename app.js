@@ -31,8 +31,28 @@ app.post('/journeybuilder/validate/', activity.validate);
 app.post('/journeybuilder/publish/', activity.publish);
 app.post('/journeybuilder/execute/', activity.execute);
 
-// New route to get journeys
-app.get('/journeys', activity.getJourneys);
+// New routes to store and get execution results
+app.post('/storeExecutionResults', async (req, res) => {
+    const { activityInstanceId, result } = req.body;
+    try {
+        await saveToDatabase(activityInstanceId, result);
+        res.status(200).send('Result stored');
+    } catch (error) {
+        console.error('Error storing result:', error);
+        res.status(500).send('Error storing result');
+    }
+});
+
+app.get('/getExecutionResults', async (req, res) => {
+    const { activityInstanceId } = req.query;
+    try {
+        const results = await getResultsFromDatabase(activityInstanceId);
+        res.status(200).json({ results: results });
+    } catch (error) {
+        console.error('Error retrieving results:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 http.createServer(app).listen(
   app.get('port'), function(){
