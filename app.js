@@ -31,6 +31,9 @@ app.post('/journeybuilder/validate/', activity.validate);
 app.post('/journeybuilder/publish/', activity.publish);
 app.post('/journeybuilder/execute/', activity.execute);
 
+// New route to get journeys
+app.get('/journeys', activity.getJourneys);
+
 // New routes to store and get execution results
 app.post('/storeExecutionResults', async (req, res) => {
     const { activityInstanceId, result } = req.body;
