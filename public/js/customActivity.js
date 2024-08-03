@@ -12,7 +12,6 @@ define(['postmonger'], function (Postmonger) {
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
     connection.on('clickedNext', save);
-    connection.on('initActivityRunningModal', initializeRunningModal); // Add this line to handle the running modal
 
     function onRender() {
         connection.trigger('ready');
@@ -63,7 +62,6 @@ define(['postmonger'], function (Postmonger) {
             {
                 contactKey: '{{Contact.Key}}',
                 selectedJourneyAPIEventKey: selectedApiEventKey || null,
-                selectedJourneyName: $('input[name="journey"]:checked').siblings('label').text(), // Save the journey name
                 payload: entrySourceData
             }
         ];
@@ -141,18 +139,5 @@ define(['postmonger'], function (Postmonger) {
             data[attr.substring(keyIndex)] = `{{${attr}}}`;
         }
         return data;
-    }
-
-    // Function to handle the running modal
-    function initializeRunningModal(data) {
-        if (data) {
-            payload = data;
-        }
-        console.log("selo");
-
-        var inArguments = payload.arguments.execute.inArguments;
-        var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
-
-        $('#selected-journey').text(selectedJourneyName || 'No journey selected');
     }
 });
