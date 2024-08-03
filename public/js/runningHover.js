@@ -11,6 +11,7 @@ define(['postmonger'], function (Postmonger) {
     }
 
     function initialize(data) {
+        console.log('Running hover initialized with data:', data);
         var inArguments = data.arguments.execute.inArguments;
         var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
 
