@@ -46,8 +46,12 @@ exports.execute = async function (req, res) {
         console.log("Extracted JourneyId:", APIEventKey);
         console.log("Extracted Data:", data);
 
-        const token = await retrieveToken();
-        await triggerJourney(token, contactKey, APIEventKey, data);
+        const result = await triggerJourney(token, contactKey, APIEventKey, data);
+
+        // Store results in inArguments for retrieval in runningModal
+        inArguments.executionResults = inArguments.executionResults || [];
+        inArguments.executionResults.push(result);
+        
         res.status(200).send('Execute');
     } catch (error) {
         console.error('Error executing journey:', error);
@@ -104,11 +108,21 @@ async function triggerJourney(token, contactKey, APIEventKey, data) {
                 'Content-Type': 'application/json'
             }
         });
+        return {
+            contactKey: contactKey,
+            status: 'Triggered',
+            errorLog: 'No Error'
+        };
     } catch (error) {
         console.error('Error triggering journey:', error);
-        throw error;
+        return {
+            contactKey: contactKey,
+            status: 'Error',
+            errorLog: error.message
+        };
     }
 }
+
 
 /*
  * GET Handler for /journeys route
