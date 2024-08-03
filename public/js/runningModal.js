@@ -21,7 +21,7 @@ define(['postmonger'], function (Postmonger) {
 
     function fetchResults(activityInstanceId) {
         $.ajax({
-            url: '/getExecutionResults',
+            url: '/getExecutionResults', // Use relative URL if hosted on the same server
             type: 'GET',
             data: { activityInstanceId: activityInstanceId },
             success: function(response) {
@@ -29,19 +29,29 @@ define(['postmonger'], function (Postmonger) {
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching results:', error);
-                $('#selected-journey').append('<p>Error loading results. Please try again.</p>');
             }
         });
     }
 
     function displayResults(results) {
-        var resultsTable = '<table><thead><tr><th>Contact Key</th><th>Status</th><th>Error Log</th></tr></thead><tbody>';
+        var $resultsTable = $('<table>').append(
+            $('<tr>').append(
+                $('<th>').text('Contact Key'),
+                $('<th>').text('Status'),
+                $('<th>').text('Error Log')
+            )
+        );
 
-        results.forEach(result => {
-            resultsTable += `<tr><td>${result.contactKey}</td><td>${result.status}</td><td>${result.errorLog}</td></tr>`;
+        results.forEach(function(result) {
+            $resultsTable.append(
+                $('<tr>').append(
+                    $('<td>').text(result.contactKey),
+                    $('<td>').text(result.status),
+                    $('<td>').text(result.errorLog)
+                )
+            );
         });
 
-        resultsTable += '</tbody></table>';
-        $('#selected-journey').append(resultsTable);
+        $('#selected-journey').after($resultsTable);
     }
 });

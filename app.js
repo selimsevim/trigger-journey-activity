@@ -38,7 +38,7 @@ app.get('/journeys', activity.getJourneys);
 app.post('/storeExecutionResults', async (req, res) => {
     const { activityInstanceId, result } = req.body;
     try {
-        await saveToDatabase(activityInstanceId, result);
+        await activity.storeExecutionResult(activityInstanceId, result.contactKey, result.status, result.errorLog);
         res.status(200).send('Result stored');
     } catch (error) {
         console.error('Error storing result:', error);
@@ -49,7 +49,7 @@ app.post('/storeExecutionResults', async (req, res) => {
 app.get('/getExecutionResults', async (req, res) => {
     const { activityInstanceId } = req.query;
     try {
-        const results = await getResultsFromDatabase(activityInstanceId);
+        const results = await activity.getResultsFromDatabase(activityInstanceId);
         res.status(200).json({ results: results });
     } catch (error) {
         console.error('Error retrieving results:', error);

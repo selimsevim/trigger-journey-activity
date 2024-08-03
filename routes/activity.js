@@ -63,7 +63,6 @@ exports.execute = async function (req, res) {
     }
 };
 
-
 exports.publish = function (req, res) {
     logData(req);
     res.status(200).send('Publish');
@@ -113,9 +112,10 @@ async function triggerJourney(token, contactKey, APIEventKey, data) {
                 'Content-Type': 'application/json'
             }
         });
+        return { contactKey, status: 'Triggered', errorLog: 'No Error' };
     } catch (error) {
         console.error('Error triggering journey:', error);
-        throw error;
+        return { contactKey, status: 'Error', errorLog: error.message };
     }
 }
 
@@ -158,8 +158,12 @@ async function fetchJourneys(token) {
  */
 async function storeExecutionResult(activityInstanceId, contactKey, status, errorLog) {
     const result = { contactKey, status, errorLog };
-    // Save the result to the database
-    await saveToDatabase(activityInstanceId, result);
+    try {
+        await saveToDatabase(activityInstanceId, result);
+    } catch (error) {
+        console.error('Error storing execution result:', error);
+        throw error;
+    }
 }
 
 /*
@@ -170,13 +174,16 @@ async function saveToDatabase(activityInstanceId, result) {
     // Example: using a simple array as a mock database
     const db = getMockDatabase();
     db.push({ activityInstanceId: activityInstanceId, result: result });
+    console.log('Database after save:', db);
 }
 
 async function getResultsFromDatabase(activityInstanceId) {
     // Implement your database retrieval logic here
     // Example: using a simple array as a mock database
     const db = getMockDatabase();
-    return db.filter(record => record.activityInstanceId === activityInstanceId).map(record => record.result);
+    const results = db.filter(record => record.activityInstanceId === activityInstanceId).map(record => record.result);
+    console.log('Results from database:', results);
+    return results;
 }
 
 function getMockDatabase() {

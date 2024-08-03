@@ -59,8 +59,6 @@ define(['postmonger'], function (Postmonger) {
         var selectedApiEventKey = apiEventKeyMap[selectedJourneyId]; // Retrieve the apiEventKey from the map
         var selectedJourneyName = $('input[name="journey"]:checked').closest('label').text().trim();
 
-        console.log(selectedJourneyName);
-
         payload.arguments.execute.inArguments = [
             {
                 contactKey: '{{Contact.Key}}',
