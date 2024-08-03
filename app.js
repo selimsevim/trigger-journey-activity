@@ -21,6 +21,14 @@ if ('development' === app.get('env')) {
   app.use(errorhandler());
 }
 
+app.get('/runningHover.html', (req, res) => {
+    res.sendFile(__dirname + '/public/runningHover.html');
+});
+
+app.get('/runningModal.html', (req, res) => {
+    res.sendFile(__dirname + '/public/runningModal.html');
+});
+
 
 app.get('/', routes.index);
 app.post('/login', routes.login);
