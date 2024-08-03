@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>JOURNEY BUILDER APP TEMPLATE</title>
+    <title>Running Journey</title>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie-edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,7 +17,7 @@
                 baseUrl: 'js'
             };
             var dependencies = [
-                'customActivity'
+                'runningModal'
             ];
             require(config, dependencies);
         })();
@@ -25,7 +25,8 @@
 </head>
 
 <body>
-test
+    <h1>Selected Journey</h1>
+    <p id="selected-journey">Loading...</p>
 </body>
 
 </html>

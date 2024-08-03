@@ -64,8 +64,8 @@
             "width": 500,
             "fullscreen": false
         },
-         "runningModal": {
-            "url": "runningModal.html1"
+        "runningModal": {
+            "url": "runningModal.html"
         }
     },
     "schema": 
