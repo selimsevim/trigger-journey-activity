@@ -4,8 +4,7 @@ define(['postmonger'], function (Postmonger) {
     var connection = new Postmonger.Session();
 
     $(window).ready(onRender);
-    connection.on('initActivityRunningModal', initialize);
-    console.log("selo2");
+    connection.on('initActivityRunningHover', initialize);
 
     function onRender() {
         connection.trigger('ready');
