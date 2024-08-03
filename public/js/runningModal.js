@@ -4,7 +4,7 @@ define(['postmonger'], function (Postmonger) {
     var connection = new Postmonger.Session();
 
     $(window).ready(onRender);
-    connection.on('initActivityRunningHover', initialize);
+    connection.on('initActivityRunningModal', initialize);
 
     function onRender() {
         connection.trigger('ready');
