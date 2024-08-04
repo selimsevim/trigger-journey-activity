@@ -195,6 +195,21 @@ function getMockDatabase() {
     return global.mockDatabase;
 }
 
+// Route handler to get execution results
+exports.getResultsFromDatabase = async function (req, res) {
+    try {
+        const activityInstanceId = req.query.activityInstanceId;
+        console.log('Received request for results with activityInstanceId:', activityInstanceId);
+
+        const results = await getResultsFromDatabase(activityInstanceId);
+        console.log('Retrieved results:', results);
+
+        res.status(200).json({ results });
+    } catch (error) {
+        console.error('Error retrieving results:', error);
+        res.status(500).send('Error retrieving results');
+    }
+};
+
 // Export functions
 exports.storeExecutionResult = storeExecutionResult;
-exports.getResultsFromDatabase = getResultsFromDatabase;

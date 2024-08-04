@@ -25,6 +25,7 @@ define(['postmonger'], function (Postmonger) {
             url: '/getExecutionResults', // Use relative URL if hosted on the same server
             type: 'GET',
             data: { activityInstanceId: activityInstanceId },
+            timeout: 10000, // 10 seconds timeout for AJAX request
             success: function(response) {
                 displayResults(response.results);
             },
