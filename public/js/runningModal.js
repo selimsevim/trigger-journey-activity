@@ -12,7 +12,6 @@ define(['postmonger'], function (Postmonger) {
 
     function initialize(data) {
         var activityInstanceId = data.definitionInstanceId || data.activityInstanceId;
-        console.log(activityInstanceId);
         var selectedJourneyName = data.arguments.execute.inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
 
         $('#selected-journey').text(selectedJourneyName || 'No journey selected');
