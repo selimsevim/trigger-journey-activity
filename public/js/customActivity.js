@@ -31,7 +31,7 @@ define(['postmonger'], function (Postmonger) {
             payload = data;
         }
 
-        console.log(data);
+        console.log('Initialize data:', data);
 
         connection.trigger('requestSchema');
         connection.on('requestedSchema', function (data) {
@@ -50,7 +50,9 @@ define(['postmonger'], function (Postmonger) {
 
         var selectedJourneyId = null;
         if (inArguments.length > 0) {
+            console.log('In Arguments:', inArguments);
             selectedJourneyId = inArguments[0].selectedJourneyId;
+            console.log('Selected Journey ID from inArguments:', selectedJourneyId);
         }
 
         fetchJourneys(selectedJourneyId);
@@ -61,10 +63,13 @@ define(['postmonger'], function (Postmonger) {
         var selectedApiEventKey = apiEventKeyMap[selectedJourneyId]; // Retrieve the apiEventKey from the map
         var selectedJourneyName = $('input[name="journey"]:checked').closest('label').text().trim();
 
+        console.log('Saving selectedJourneyId:', selectedJourneyId);
+        console.log('Saving selectedJourneyName:', selectedJourneyName);
 
         payload.arguments.execute.inArguments = [
             {
                 contactKey: '{{Contact.Key}}',
+                selectedJourneyId: selectedJourneyId || null,
                 selectedJourneyAPIEventKey: selectedApiEventKey || null,
                 selectedJourneyName: selectedJourneyName || 'No journey selected',
                 payload: entrySourceData
@@ -124,10 +129,11 @@ define(['postmonger'], function (Postmonger) {
                 'data-api-event-key': apiEventKey // Add apiEventKey as a data attribute
             });
 
-            console.log(journey.id);
-            console.log(selectedJourneyId);
+            console.log('Journey ID:', journey.id);
+            console.log('Selected Journey ID:', selectedJourneyId);
 
             if (journey.id === selectedJourneyId) {
+                console.log('Pre-selecting journey:', journey.name);
                 $radio.prop('checked', true);
             }
 
