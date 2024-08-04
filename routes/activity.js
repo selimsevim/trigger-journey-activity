@@ -53,7 +53,8 @@ exports.execute = async function (req, res) {
         // Store success result in external storage
         await storeExecutionResult(activityInstanceId, contactKey, result.status, result.errorLog);
 
-        res.status(200).send('Execute');
+        // Send the activityInstanceId in the response
+        res.status(200).json({ activityInstanceId });
     } catch (error) {
         console.error('Error executing journey:', error);
 
@@ -211,5 +212,14 @@ exports.getResultsFromDatabase = async function (req, res) {
     }
 };
 
+// Route handler to get the activity instance ID
+exports.getActivityInstanceId = function (req, res) {
+    const activityInstanceId = req.query.activityInstanceId;
+    console.log('Received request for activity instance ID:', activityInstanceId);
+    res.status(200).json({ activityInstanceId });
+};
+
 // Export functions
 exports.storeExecutionResult = storeExecutionResult;
+exports.getResultsFromDatabase = getResultsFromDatabase;
+exports.getActivityInstanceId = exports.getActivityInstanceId;
