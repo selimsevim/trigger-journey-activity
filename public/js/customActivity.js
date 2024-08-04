@@ -69,8 +69,7 @@ define(['postmonger'], function (Postmonger) {
                 selectedJourneyId: selectedJourneyId || null,
                 selectedJourneyAPIEventKey: selectedApiEventKey || null,
                 selectedJourneyName: selectedJourneyName || 'No journey selected',
-                payload: entrySourceData,
-                activityInstanceId: '{{Activity.Id}}'
+                payload: entrySourceData
             }
         ];
 
