@@ -31,8 +31,7 @@ define(['postmonger'], function (Postmonger) {
             payload = data;
         }
 
-        var activityInstanceId = data.definitionInstanceId || data.activityInstanceId;
-        console.log(activityInstanceId);
+        console.log(data);
 
         connection.trigger('requestSchema');
         connection.on('requestedSchema', function (data) {
