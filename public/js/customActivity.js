@@ -124,6 +124,9 @@ define(['postmonger'], function (Postmonger) {
                 'data-api-event-key': apiEventKey // Add apiEventKey as a data attribute
             });
 
+            console.log(journey.id);
+            console.log(selectedJourneyId);
+
             if (journey.id === selectedJourneyId) {
                 $radio.prop('checked', true);
             }
