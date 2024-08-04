@@ -5,6 +5,9 @@ const util = require('util');
 // Global Variables
 const tokenURL = `${process.env.authenticationUrl}/v2/token`;
 
+// In-memory store for activity instance IDs
+let activityInstanceStore = {};
+
 // Log function for demonstration purposes
 function logData(req) {
     console.log(util.inspect(req.body, { showHidden: false, depth: null }));
@@ -53,13 +56,18 @@ exports.execute = async function (req, res) {
         // Store success result in external storage
         await storeExecutionResult(activityInstanceId, contactKey, result.status, result.errorLog);
 
-        // Send the activityInstanceId in the response
+        // Store the activityInstanceId in memory
+        activityInstanceStore[activityInstanceId] = { status: 'Triggered', errorLog: 'No Error' };
+
         res.status(200).json({ activityInstanceId });
     } catch (error) {
         console.error('Error executing journey:', error);
 
         // Store error result in external storage
-        await storeExecutionResult(req.body.activityInstanceId, req.body.contactKey, 'Error', error.message);
+        const activityInstanceId = req.body.activityInstanceId || req.body.definitionInstanceId;
+        activityInstanceStore[activityInstanceId] = { status: 'Error', errorLog: error.message };
+
+        await storeExecutionResult(activityInstanceId, req.body.contactKey, 'Error', error.message);
 
         res.status(500).send('Error executing journey');
     }
@@ -212,14 +220,22 @@ exports.getResultsFromDatabase = async function (req, res) {
     }
 };
 
-// Route handler to get the activity instance ID
+// New route to get activity instance ID
 exports.getActivityInstanceId = function (req, res) {
-    const activityInstanceId = req.query.activityInstanceId;
-    console.log('Received request for activity instance ID:', activityInstanceId);
-    res.status(200).json({ activityInstanceId });
+    try {
+        const activityInstanceId = req.query.activityInstanceId;
+        console.log('Received request for activity instance ID:', activityInstanceId);
+
+        if (activityInstanceStore[activityInstanceId]) {
+            res.status(200).json({ activityInstanceId });
+        } else {
+            res.status(404).send('Activity instance ID not found');
+        }
+    } catch (error) {
+        console.error('Error retrieving activity instance ID:', error);
+        res.status(500).send('Error retrieving activity instance ID');
+    }
 };
 
 // Export functions
 exports.storeExecutionResult = storeExecutionResult;
-exports.getResultsFromDatabase = getResultsFromDatabase;
-exports.getActivityInstanceId = exports.getActivityInstanceId;
