@@ -51,7 +51,7 @@ exports.execute = async function (req, res) {
         const result = await triggerJourney(token, contactKey, APIEventKey, data);
 
         // Store success result in external storage
-        await storeExecutionResult(activityInstanceId, contactKey, 'Triggered', 'No Error');
+        await storeExecutionResult(activityInstanceId, contactKey, result.status, result.errorLog);
 
         res.status(200).send('Execute');
     } catch (error) {
