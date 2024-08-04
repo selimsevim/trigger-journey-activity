@@ -5,9 +5,6 @@ const util = require('util');
 // Global Variables
 const tokenURL = `${process.env.authenticationUrl}/v2/token`;
 
-// In-memory store for activity instance IDs
-let activityInstanceStore = {};
-
 // Log function for demonstration purposes
 function logData(req) {
     console.log(util.inspect(req.body, { showHidden: false, depth: null }));
@@ -26,6 +23,7 @@ exports.save = async function (req, res) {
     try {
         const payload = req.body;
         // Save the journey ID and payload in your storage (e.g., database)
+        // This is a placeholder, replace it with actual storage logic
         await saveToDatabase(payload);
         res.status(200).send('Save');
     } catch (error) {
@@ -43,32 +41,16 @@ exports.execute = async function (req, res) {
         const contactKey = inArguments.contactKey;
         const APIEventKey = inArguments.selectedJourneyAPIEventKey;
         const data = inArguments.payload;
-        const activityInstanceId = req.body.activityInstanceId || req.body.definitionInstanceId; // Get the activity instance ID
 
         console.log("Extracted ContactKey:", contactKey);
         console.log("Extracted JourneyId:", APIEventKey);
         console.log("Extracted Data:", data);
-        console.log("Extracted ActivityInstanceId:", activityInstanceId);
 
         const token = await retrieveToken();
-        const result = await triggerJourney(token, contactKey, APIEventKey, data);
-
-        // Store success result in external storage
-        await storeExecutionResult(activityInstanceId, contactKey, result.status, result.errorLog);
-
-        // Store the activityInstanceId in memory
-        activityInstanceStore[activityInstanceId] = { status: 'Triggered', errorLog: 'No Error' };
-
-        res.status(200).json({ activityInstanceId });
+        await triggerJourney(token, contactKey, APIEventKey, data);
+        res.status(200).send('Execute');
     } catch (error) {
         console.error('Error executing journey:', error);
-
-        // Store error result in external storage
-        const activityInstanceId = req.body.activityInstanceId || req.body.definitionInstanceId;
-        activityInstanceStore[activityInstanceId] = { status: 'Error', errorLog: error.message };
-
-        await storeExecutionResult(activityInstanceId, req.body.contactKey, 'Error', error.message);
-
         res.status(500).send('Error executing journey');
     }
 };
@@ -122,10 +104,9 @@ async function triggerJourney(token, contactKey, APIEventKey, data) {
                 'Content-Type': 'application/json'
             }
         });
-        return { contactKey, status: 'Triggered', errorLog: 'No Error' };
     } catch (error) {
         console.error('Error triggering journey:', error);
-        return { contactKey, status: 'Error', errorLog: error.message };
+        throw error;
     }
 }
 
@@ -164,78 +145,10 @@ async function fetchJourneys(token) {
 }
 
 /*
- * Function to store execution results
- */
-async function storeExecutionResult(activityInstanceId, contactKey, status, errorLog) {
-    const result = { contactKey, status, errorLog };
-    try {
-        await saveToDatabase(activityInstanceId, result);
-    } catch (error) {
-        console.error('Error storing execution result:', error);
-        throw error;
-    }
-}
-
-/*
  * Placeholder function to simulate saving to a database
  */
-async function saveToDatabase(activityInstanceId, result) {
+async function saveToDatabase(data) {
     // Implement your database save logic here
-    // Example: using a simple array as a mock database
-    const db = getMockDatabase();
-    db.push({ activityInstanceId: activityInstanceId, result: result });
-    console.log('Database after save:', db);
+    console.log('Saving to database:', data);
+    return Promise.resolve();
 }
-
-async function getResultsFromDatabase(activityInstanceId) {
-    // Implement your database retrieval logic here
-    // Example: using a simple array as a mock database
-    const db = getMockDatabase();
-    const results = db.filter(record => record.activityInstanceId === activityInstanceId).map(record => record.result);
-    console.log('Results from database:', results);
-    return results;
-}
-
-function getMockDatabase() {
-    // Example: a simple in-memory database
-    if (!global.mockDatabase) {
-        global.mockDatabase = [];
-    }
-    return global.mockDatabase;
-}
-
-// Route handler to get execution results
-exports.getResultsFromDatabase = async function (req, res) {
-    try {
-        const activityInstanceId = req.query.activityInstanceId;
-        console.log('Received request for results with activityInstanceId:', activityInstanceId);
-
-        const results = await getResultsFromDatabase(activityInstanceId);
-        console.log('Retrieved results:', results);
-
-        res.status(200).json({ results });
-    } catch (error) {
-        console.error('Error retrieving results:', error);
-        res.status(500).send('Error retrieving results');
-    }
-};
-
-// New route to get activity instance ID
-exports.getActivityInstanceId = function (req, res) {
-    try {
-        const activityInstanceId = req.query.activityInstanceId;
-        console.log('Received request for activity instance ID:', activityInstanceId);
-
-        if (activityInstanceStore[activityInstanceId]) {
-            res.status(200).json({ activityInstanceId });
-        } else {
-            res.status(404).send('Activity instance ID not found');
-        }
-    } catch (error) {
-        console.error('Error retrieving activity instance ID:', error);
-        res.status(500).send('Error retrieving activity instance ID');
-    }
-};
-
-// Export functions
-exports.storeExecutionResult = storeExecutionResult;

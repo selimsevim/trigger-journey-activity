@@ -34,13 +34,6 @@ app.post('/journeybuilder/execute/', activity.execute);
 // New route to get journeys
 app.get('/journeys', activity.getJourneys);
 
-// New routes to store and get execution results
-app.post('/storeExecutionResults', activity.storeExecutionResult);
-app.get('/getExecutionResults', activity.getResultsFromDatabase);
-
-// New route to get activity instance ID
-app.get('/getActivityInstanceId', activity.getActivityInstanceId);
-
 http.createServer(app).listen(
   app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
