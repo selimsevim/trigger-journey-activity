@@ -31,8 +31,6 @@ define(['postmonger'], function (Postmonger) {
             payload = data;
         }
 
-        console.log(data.activityInstanceId);
-
         connection.trigger('requestSchema');
         connection.on('requestedSchema', function (data) {
             schema = data['schema'];

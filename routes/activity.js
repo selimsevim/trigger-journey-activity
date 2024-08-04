@@ -40,14 +40,15 @@ exports.execute = async function (req, res) {
         const contactKey = inArguments.contactKey;
         const APIEventKey = inArguments.selectedJourneyAPIEventKey;
         const data = inArguments.payload;
-        const activityInstanceId = req.body.activityInstanceId; // Get the activity instance ID
+        const activityInstanceId = req.body.activityInstanceId || req.body.definitionInstanceId; // Get the activity instance ID
 
         console.log("Extracted ContactKey:", contactKey);
         console.log("Extracted JourneyId:", APIEventKey);
         console.log("Extracted Data:", data);
+        console.log("Extracted ActivityInstanceId:", activityInstanceId);
 
         const token = await retrieveToken();
-        await triggerJourney(token, contactKey, APIEventKey, data);
+        const result = await triggerJourney(token, contactKey, APIEventKey, data);
 
         // Store success result in external storage
         await storeExecutionResult(activityInstanceId, contactKey, 'Triggered', 'No Error');
