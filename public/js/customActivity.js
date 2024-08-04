@@ -63,8 +63,7 @@ define(['postmonger'], function (Postmonger) {
         var selectedApiEventKey = apiEventKeyMap[selectedJourneyId]; // Retrieve the apiEventKey from the map
         var selectedJourneyName = $('input[name="journey"]:checked').closest('label').text().trim();
 
-        console.log('Saving selectedJourneyId:', selectedJourneyId);
-        console.log('Saving selectedJourneyName:', selectedJourneyName);
+        console.log('Activity ID:', payload.metaData.activityId);
 
         payload.arguments.execute.inArguments = [
             {
@@ -73,6 +72,7 @@ define(['postmonger'], function (Postmonger) {
                 selectedJourneyAPIEventKey: selectedApiEventKey || null,
                 selectedJourneyName: selectedJourneyName || 'No journey selected',
                 payload: entrySourceData
+                activityInstanceId: '{{Activity.Id}}'
             }
         ];
 
@@ -128,9 +128,6 @@ define(['postmonger'], function (Postmonger) {
                 value: journey.id,
                 'data-api-event-key': apiEventKey // Add apiEventKey as a data attribute
             });
-
-            console.log('Journey ID:', journey.id);
-            console.log('Selected Journey ID:', selectedJourneyId);
 
             if (journey.id === selectedJourneyId) {
                 console.log('Pre-selecting journey:', journey.name);

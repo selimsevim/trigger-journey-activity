@@ -11,8 +11,11 @@ define(['postmonger'], function (Postmonger) {
     }
 
     function initialize(data) {
-        var activityInstanceId = data.definitionInstanceId || data.activityInstanceId;
-        var selectedJourneyName = data.arguments.execute.inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
+        var inArguments = data.arguments.execute.inArguments;
+        var activityInstanceId = inArguments.find(arg => arg.activityInstanceId).activityInstanceId;
+        console.log('Activity Instance ID:', activityInstanceId);
+
+        var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
 
         $('#selected-journey').text(selectedJourneyName || 'No journey selected');
 
@@ -24,7 +27,6 @@ define(['postmonger'], function (Postmonger) {
             url: '/getExecutionResults', // Use relative URL if hosted on the same server
             type: 'GET',
             data: { activityInstanceId: activityInstanceId },
-            timeout: 10000, // 10 seconds timeout for AJAX request
             success: function(response) {
                 displayResults(response.results);
             },
