@@ -70,6 +70,8 @@ define(['postmonger'], function (Postmonger) {
             }
         }
 
+        console.log(uniqueId);
+
         payload.arguments.execute.inArguments = [
             {
                 contactKey: '{{Contact.Key}}',
