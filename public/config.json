@@ -22,6 +22,8 @@
       "arguments": {
         "execute": {
           "inArguments": [
+            {
+            }
           ],
           "outArguments": [
           ],
