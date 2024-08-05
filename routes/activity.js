@@ -1,6 +1,7 @@
 'use strict';
 const axios = require("axios");
 const util = require('util');
+const { Client } = require('pg'); // Assuming you are using PostgreSQL
 
 // Global Variables
 const tokenURL = `${process.env.authenticationUrl}/v2/token`;
@@ -22,8 +23,6 @@ exports.save = async function (req, res) {
     logData(req);
     try {
         const payload = req.body;
-        // Save the journey ID and payload in your storage (e.g., database)
-        // This is a placeholder, replace it with actual storage logic
         await saveToDatabase(payload);
         res.status(200).send('Save');
     } catch (error) {
@@ -37,7 +36,7 @@ exports.execute = async function (req, res) {
     try {
         console.log("Request Body:", req.body);
 
-        const inArguments = req.body.inArguments[0]; // Extract the first item in inArguments array
+        const inArguments = req.body.inArguments[0];
         const contactKey = inArguments.contactKey;
         const APIEventKey = inArguments.selectedJourneyAPIEventKey;
         const data = inArguments.payload;
@@ -158,10 +157,59 @@ async function fetchJourneys(token) {
 }
 
 /*
+ * Handler to get activity data by UUID
+ */
+exports.getActivityByUUID = async function (req, res) {
+    const uuid = req.params.uuid;
+
+    const client = new Client({
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false
+        }
+    });
+
+    await client.connect();
+
+    const query = 'SELECT * FROM activity_data WHERE uuid = $1';
+    const values = [uuid];
+
+    try {
+        const result = await client.query(query, values);
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).send('Activity not found');
+        }
+    } catch (err) {
+        console.error('Error retrieving activity data from database:', err.stack);
+        res.status(500).send('Internal Server Error');
+    } finally {
+        await client.end();
+    }
+}
+
+/*
  * Placeholder function to simulate saving to a database
  */
 async function saveToDatabase(data) {
-    // Implement your database save logic here
-    console.log('Saving to database:', data);
-    return Promise.resolve();
+    const client = new Client({
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false
+        }
+    });
+
+    await client.connect();
+
+    const query = 'INSERT INTO activity_data(uuid, contact_key, trigger_date, status, error_log) VALUES($1, $2, $3, $4, $5)';
+    const values = [data.uuid, data.contactKey, data.triggerDate, data.status, data.errorLog];
+
+    try {
+        await client.query(query, values);
+    } catch (err) {
+        console.error('Error saving data to database:', err.stack);
+    } finally {
+        await client.end();
+    }
 }
