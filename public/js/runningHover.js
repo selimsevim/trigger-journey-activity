@@ -14,7 +14,7 @@ define(['postmonger'], function (Postmonger) {
         var inArguments = data.arguments.execute.inArguments;
         var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
 
-        $('#selected-journey').text(`Triggering ${selectedJourneyName}`);
+        $('#selected-journey').text(`Triggering "${selectedJourneyName}"`);
 
     }
 });

@@ -16,7 +16,7 @@ define(['postmonger'], function (Postmonger) {
         var uuid = uuidArg ? uuidArg.uuid : null;
         var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
 
-        $('#selected-journey').text(`Selected Journey: ${selectedJourneyName}`);
+        $('#selected-journey').text(`Selected Journey: "${selectedJourneyName}"`);
 
         if (uuid) {
             fetch(`/activity/${uuid}`)
