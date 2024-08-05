@@ -8,6 +8,7 @@ define(['postmonger'], function (Postmonger) {
     var currentApiEventKey = null;
     var entrySourceData = [];
     var apiEventKeyMap = {}; // Map to store apiEventKey for each journey
+    var uniqueId = null; // Declare the uniqueId variable
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -30,6 +31,20 @@ define(['postmonger'], function (Postmonger) {
         if (data) {
             payload = data;
         }
+
+        // Check if the uuid already exists in the payload
+        if (payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments) {
+            var inArguments = payload.arguments.execute.inArguments[0];
+            if (inArguments.uuid) {
+                uniqueId = inArguments.uuid;
+            } else {
+                uniqueId = UUIDjs.create().toString(); // Generate a new unique identifier
+            }
+        } else {
+            uniqueId = UUIDjs.create().toString(); // Generate a new unique identifier
+        }
+
+        console.log('UUID:', uniqueId);
 
         connection.trigger('requestSchema');
         connection.on('requestedSchema', function (data) {
@@ -58,8 +73,6 @@ define(['postmonger'], function (Postmonger) {
         var selectedJourneyId = $('input[name="journey"]:checked').val();
         var selectedApiEventKey = apiEventKeyMap[selectedJourneyId]; // Retrieve the apiEventKey from the map
         var selectedJourneyName = $('input[name="journey"]:checked').closest('label').text().trim();
-        var uniqueId = UUIDjs.create().toString(); // Generate a unique identifier
-        console.log(uniqueId);
         
         payload.arguments.execute.inArguments = [
             {
@@ -68,7 +81,7 @@ define(['postmonger'], function (Postmonger) {
                 selectedJourneyAPIEventKey: selectedApiEventKey || null,
                 selectedJourneyName: selectedJourneyName || 'No journey selected',
                 payload: entrySourceData,
-                 uuid: uniqueId.toString()
+                uuid: uniqueId // Use the existing or new unique identifier
             }
         ];
 
