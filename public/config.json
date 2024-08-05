@@ -14,7 +14,7 @@
         "en-US":
         {
             "name": "JourneyTrigger",
-            "description": "An activity that helps you to trigger a journey from another journey.",
+            "description": "An activity that helps you trigger a journey from another journey.",
             "step1Label": "Configure Activity"
         }
     },
