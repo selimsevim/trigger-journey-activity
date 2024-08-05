@@ -8,6 +8,7 @@ define(['postmonger'], function (Postmonger) {
     var currentApiEventKey = null;
     var entrySourceData = [];
     var apiEventKeyMap = {}; // Map to store apiEventKey for each journey
+    var uniqueId = null; // Declare the uniqueId variable
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -29,6 +30,18 @@ define(['postmonger'], function (Postmonger) {
     function initialize(data) {
         if (data) {
             payload = data;
+        }
+
+        // Check if the uuid already exists in the payload
+        if (payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments) {
+            var inArguments = payload.arguments.execute.inArguments[0];
+            if (inArguments.uuid) {
+                uniqueId = inArguments.uuid;
+            } else {
+                uniqueId = UUIDjs.create().toString(); // Generate a new unique identifier
+            }
+        } else {
+            uniqueId = UUIDjs.create().toString(); // Generate a new unique identifier
         }
 
         connection.trigger('requestSchema');
@@ -58,20 +71,7 @@ define(['postmonger'], function (Postmonger) {
         var selectedJourneyId = $('input[name="journey"]:checked').val();
         var selectedApiEventKey = apiEventKeyMap[selectedJourneyId]; // Retrieve the apiEventKey from the map
         var selectedJourneyName = $('input[name="journey"]:checked').closest('label').text().trim();
-
-        // Generate a unique identifier if it doesn't exist
-        var uniqueId = UUIDjs.create().toString();
-
-        // Check if the uuid already exists in the payload
-        if (payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments) {
-            var inArguments = payload.arguments.execute.inArguments[0];
-            if (inArguments.uuid) {
-                uniqueId = inArguments.uuid;
-            }
-        }
-
-        console.log(uniqueId);
-
+        
         payload.arguments.execute.inArguments = [
             {
                 contactKey: '{{Contact.Key}}',
