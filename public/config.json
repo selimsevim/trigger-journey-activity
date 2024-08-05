@@ -22,12 +22,8 @@
       "arguments": {
         "execute": {
           "inArguments": [
-            {
-            }
           ],
           "outArguments": [
-            {
-            }
           ],
           "url": "https://journey-trigger-activity-42320f7c3c0b.herokuapp.com/journeybuilder/execute"
         }
