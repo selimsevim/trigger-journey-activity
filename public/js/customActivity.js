@@ -1,4 +1,4 @@
-define(['postmonger', 'uuid'], function (Postmonger, UUID) {
+define(['postmonger'], function (Postmonger) {
     'use strict';
 
     var connection = new Postmonger.Session();
@@ -58,8 +58,8 @@ define(['postmonger', 'uuid'], function (Postmonger, UUID) {
         var selectedJourneyId = $('input[name="journey"]:checked').val();
         var selectedApiEventKey = apiEventKeyMap[selectedJourneyId]; // Retrieve the apiEventKey from the map
         var selectedJourneyName = $('input[name="journey"]:checked').closest('label').text().trim();
-        var uniqueId = UUID.create(); // Generate a unique identifier
-        console.log(uniqueId.toString());
+        var uniqueId = UUIDjs.create().toString(); // Generate a unique identifier
+        console.log(uniqueId);
         
         payload.arguments.execute.inArguments = [
             {
