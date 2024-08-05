@@ -62,9 +62,25 @@ exports.execute = async function (req, res) {
         res.status(200).send('Execute');
     } catch (error) {
         console.error('Error executing journey:', error);
-        res.status(500).send('Error executing journey');
+
+        const responsePayload = {
+            uuid: req.body.inArguments[0].uuid,
+            contactKey: req.body.inArguments[0].contactKey,
+            triggerDate: new Date(),
+            status: 'Error',
+            errorLog: error.message
+        };
+
+        try {
+            await saveToDatabase(responsePayload);
+        } catch (dbError) {
+            console.error('Error saving error log to database:', dbError);
+        }
+
+        res.status(200).send('Execute'); // Ensure the journey continues
     }
 };
+
 
 exports.publish = function (req, res) {
     logData(req);
