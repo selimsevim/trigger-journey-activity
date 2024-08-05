@@ -8,6 +8,7 @@ define(['postmonger'], function (Postmonger) {
     var currentApiEventKey = null;
     var entrySourceData = [];
     var apiEventKeyMap = {}; // Map to store apiEventKey for each journey
+    var activityId = '{{Activity.Id}}'; // Variable to store Activity Id
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -56,6 +57,9 @@ define(['postmonger'], function (Postmonger) {
         }
 
         fetchJourneys(selectedJourneyId);
+
+        // Log Activity Id to the console
+        console.log('Activity Id:', activityId);
     }
 
     function save() {
@@ -69,7 +73,8 @@ define(['postmonger'], function (Postmonger) {
                 selectedJourneyId: selectedJourneyId || null,
                 selectedJourneyAPIEventKey: selectedApiEventKey || null,
                 selectedJourneyName: selectedJourneyName || 'No journey selected',
-                payload: entrySourceData
+                payload: entrySourceData,
+                activityId: activityId // Include Activity Id in the payload
             }
         ];
 
@@ -120,32 +125,4 @@ define(['postmonger'], function (Postmonger) {
         journeys.forEach(function (journey) {
             var apiEventKey = apiEventKeyMap[journey.id];
             var $radio = $('<input>', {
-                type: 'radio',
-                name: 'journey',
-                value: journey.id,
-                'data-api-event-key': apiEventKey // Add apiEventKey as a data attribute
-            });
-
-            if (journey.id === selectedJourneyId) {
-                console.log('Pre-selecting journey:', journey.name);
-                $radio.prop('checked', true);
-            }
-
-            $radioGroup.append(
-                $('<label>', {
-                    text: journey.name
-                }).prepend($radio)
-            );
-        });
-    }
-
-    function addEntrySourceAttributesToInArguments(schema) {
-        var data = {};
-        for (var i = 0; i < schema.length; i++) {
-            let attr = schema[i].key;
-            let keyIndex = attr.lastIndexOf('.') + 1;
-            data[attr.substring(keyIndex)] = `{{${attr}}}`;
-        }
-        return data;
-    }
-});
+     
