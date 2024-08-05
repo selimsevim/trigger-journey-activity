@@ -6,21 +6,14 @@ const { Client } = require('pg');
 // Global Variables
 const tokenURL = `${process.env.authenticationUrl}/v2/token`;
 
-// Log function for demonstration purposes
-function logData(req) {
-    console.log(util.inspect(req.body, { showHidden: false, depth: null }));
-}
-
 /*
  * POST Handlers for various routes
  */
 exports.edit = function (req, res) {
-    logData(req);
     res.status(200).send('Edit');
 };
 
 exports.save = async function (req, res) {
-    logData(req);
     try {
         const payload = req.body;
         await saveToDatabase(payload);
@@ -32,19 +25,13 @@ exports.save = async function (req, res) {
 };
 
 exports.execute = async function (req, res) {
-    logData(req);
     try {
-        console.log("Request Body:", req.body);
 
         const inArguments = req.body.inArguments[0];
         const contactKey = inArguments.contactKey;
         const APIEventKey = inArguments.selectedJourneyAPIEventKey;
         const data = inArguments.payload;
         const uuid = inArguments.uuid;
-
-        console.log("Extracted ContactKey:", contactKey);
-        console.log("Extracted JourneyId:", APIEventKey);
-        console.log("Extracted Data:", data);
 
         const token = await retrieveToken();
         const response = await triggerJourney(token, contactKey, APIEventKey, data);
@@ -83,17 +70,14 @@ exports.execute = async function (req, res) {
 
 
 exports.publish = function (req, res) {
-    logData(req);
     res.status(200).send('Publish');
 };
 
 exports.validate = function (req, res) {
-    logData(req);
     res.status(200).send('Validate');
 };
 
 exports.stop = function (req, res) {
-    logData(req);
     res.status(200).send('Stop');
 };
 
