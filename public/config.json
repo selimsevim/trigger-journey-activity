@@ -23,6 +23,7 @@
         "execute": {
           "inArguments": [
             {
+            "ActivityId": "{{Activity.Id}}"
             }
           ],
           "outArguments": [
