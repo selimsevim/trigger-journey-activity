@@ -1,7 +1,7 @@
 'use strict';
 const axios = require("axios");
 const util = require('util');
-const { Client } = require('pg'); // Assuming you are using PostgreSQL
+const { Client } = require('pg');
 
 // Global Variables
 const tokenURL = `${process.env.authenticationUrl}/v2/token`;
@@ -190,7 +190,7 @@ exports.getActivityByUUID = async function (req, res) {
 }
 
 /*
- * Placeholder function to simulate saving to a database
+ * Function to save data to the database
  */
 async function saveToDatabase(data) {
     const client = new Client({
@@ -201,6 +201,17 @@ async function saveToDatabase(data) {
     });
 
     await client.connect();
+
+    // Ensure the table exists
+    await client.query(`
+        CREATE TABLE IF NOT EXISTS activity_data (
+            uuid VARCHAR(36) PRIMARY KEY,
+            contact_key VARCHAR(255) NOT NULL,
+            trigger_date TIMESTAMP NOT NULL,
+            status VARCHAR(50) NOT NULL,
+            error_log TEXT
+        )
+    `);
 
     const query = 'INSERT INTO activity_data(uuid, contact_key, trigger_date, status, error_log) VALUES($1, $2, $3, $4, $5)';
     const values = [data.uuid, data.contactKey, data.triggerDate, data.status, data.errorLog];
