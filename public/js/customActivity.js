@@ -59,7 +59,7 @@ define(['postmonger'], function (Postmonger) {
         fetchJourneys(selectedJourneyId);
 
         // Log Activity Id to the console
-        console.log('Activity Id:', activityId);
+        console.log('Activity Id:', inArguments[0]);
     }
 
     function save() {
