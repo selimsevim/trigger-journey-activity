@@ -193,7 +193,7 @@ exports.getActivityByUUID = async function (req, res) {
     try {
         const result = await client.query(query, values);
         if (result.rows.length > 0) {
-            res.json(result.rows[0]);
+            res.json(result.rows); // Return all matching rows
         } else {
             res.status(404).send('Activity not found');
         }
@@ -204,6 +204,7 @@ exports.getActivityByUUID = async function (req, res) {
         await client.end();
     }
 }
+
 
 /*
  * Function to save data to the database

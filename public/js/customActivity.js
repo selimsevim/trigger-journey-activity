@@ -34,14 +34,20 @@ define(['postmonger'], function (Postmonger) {
 
         // Check if the uuid already exists in the payload
         if (payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments) {
-            var inArguments = payload.arguments.execute.inArguments[0];
+            var inArguments = payload.arguments.execute.inArguments[0] || {};
             if (inArguments.uuid) {
                 uniqueId = inArguments.uuid;
             } else {
                 uniqueId = UUIDjs.create().toString(); // Generate a new unique identifier
+                payload.arguments.execute.inArguments[0] = payload.arguments.execute.inArguments[0] || {};
+                payload.arguments.execute.inArguments[0].uuid = uniqueId;
             }
         } else {
             uniqueId = UUIDjs.create().toString(); // Generate a new unique identifier
+            payload.arguments = payload.arguments || {};
+            payload.arguments.execute = payload.arguments.execute || {};
+            payload.arguments.execute.inArguments = payload.arguments.execute.inArguments || [{}];
+            payload.arguments.execute.inArguments[0].uuid = uniqueId;
         }
 
         connection.trigger('requestSchema');

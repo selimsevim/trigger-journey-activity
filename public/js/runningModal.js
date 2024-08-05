@@ -11,7 +11,6 @@ define(['postmonger'], function (Postmonger) {
     }
 
     function initialize(data) {
-        
         var inArguments = data.arguments.execute.inArguments;
         var uuidArg = inArguments.find(arg => arg.uuid);
         var uuid = uuidArg ? uuidArg.uuid : null;
@@ -43,12 +42,14 @@ define(['postmonger'], function (Postmonger) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>${activityData.contact_key}</td>
-                        <td>${new Date(activityData.trigger_date).toLocaleDateString()}</td>
-                        <td>${activityData.status}</td>
-                        <td>${activityData.error_log || ''}</td>
-                    </tr>
+                    ${activityData.map(entry => `
+                        <tr>
+                            <td>${entry.contact_key}</td>
+                            <td>${new Date(entry.trigger_date).toLocaleDateString()}</td>
+                            <td>${entry.status}</td>
+                            <td>${entry.error_log || ''}</td>
+                        </tr>
+                    `).join('')}
                 </tbody>
             </table>
         `;
