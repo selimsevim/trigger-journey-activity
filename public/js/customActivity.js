@@ -44,8 +44,6 @@ define(['postmonger'], function (Postmonger) {
             uniqueId = UUIDjs.create().toString(); // Generate a new unique identifier
         }
 
-        console.log(uniqueId);
-
         connection.trigger('requestSchema');
         connection.on('requestedSchema', function (data) {
             schema = data['schema'];
