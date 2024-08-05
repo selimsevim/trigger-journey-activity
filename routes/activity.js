@@ -205,7 +205,8 @@ async function saveToDatabase(data) {
     // Ensure the table exists
     await client.query(`
         CREATE TABLE IF NOT EXISTS activity_data (
-            uuid VARCHAR(36) PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
+            uuid VARCHAR(36) NOT NULL,
             contact_key VARCHAR(255) NOT NULL,
             trigger_date TIMESTAMP NOT NULL,
             status VARCHAR(50) NOT NULL,
