@@ -44,8 +44,6 @@ define(['postmonger'], function (Postmonger) {
             uniqueId = UUIDjs.create().toString(); // Generate a new unique identifier
         }
 
-        console.log('UUID:', uniqueId);
-
         connection.trigger('requestSchema');
         connection.on('requestedSchema', function (data) {
             schema = data['schema'];
@@ -139,7 +137,6 @@ define(['postmonger'], function (Postmonger) {
             });
 
             if (journey.id === selectedJourneyId) {
-                console.log('Pre-selecting journey:', journey.name);
                 $radio.prop('checked', true);
             }
 

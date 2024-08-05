@@ -11,20 +11,18 @@ define(['postmonger'], function (Postmonger) {
     }
 
     function initialize(data) {
-        console.log('Initialization Data:', data);
         
         var inArguments = data.arguments.execute.inArguments;
         var uuidArg = inArguments.find(arg => arg.uuid);
         var uuid = uuidArg ? uuidArg.uuid : null;
+        var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
 
-        console.log('In Arguments:', inArguments);
-        console.log('UUID:', uuid);
+        $('#selected-journey').text(`Selected Journey: ${selectedJourneyName}`);
 
         if (uuid) {
             fetch(`/activity/${uuid}`)
                 .then(response => response.json())
                 .then(activityData => {
-                    console.log('Activity Data:', activityData);
                     populateTable(activityData);
                 })
                 .catch(error => console.error('Error fetching activity data:', error));

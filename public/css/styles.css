@@ -78,3 +78,32 @@ button:hover {
     text-align: center;
     margin-bottom: 20px;
 }
+
+#journey-details p {
+    font-size: 1.2em;
+    margin: 0.5em 0;
+}
+.progress-bar {
+    width: 100%;
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.progress {
+    width: 0;
+    height: 20px;
+    background-color: #4caf50;
+    border-radius: 5px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+th {
+    background-color: #f3f3f3;
+}

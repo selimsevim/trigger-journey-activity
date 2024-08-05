@@ -5,7 +5,7 @@
         "icon": "images/icon.png",
         "iconSmall": "images/iconSmall.png",
         "backgroundColor": "#9f8e69",
-        "category": "<CATEGORY_OF_APP_BASED_ON_DOCS>"
+        "category": "Custom"
     },
 
     "type": "REST",
@@ -13,8 +13,8 @@
     {
         "en-US":
         {
-            "name": "asdsadsa",
-            "description": "<DESC_OF_APP>",
+            "name": "JourneyTrigger",
+            "description": "An activity that helps you to trigger a journey from another journey.",
             "step1Label": "Configure Activity"
         }
     },
