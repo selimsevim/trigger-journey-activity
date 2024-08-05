@@ -13,6 +13,7 @@ define(['postmonger'], function (Postmonger) {
     function initialize(data) {
         var inArguments = data.arguments.execute.inArguments;
         var uuid = inArguments.find(arg => arg.uuid).uuid;
+        console.log(uuid);
 
         fetch(`/activity/${uuid}`)
             .then(response => response.json())
