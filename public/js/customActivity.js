@@ -1,4 +1,4 @@
-define(['postmonger'], function (Postmonger) {
+define(['postmonger', 'uuid'], function (Postmonger, uuidv4) {
     'use strict';
 
     var connection = new Postmonger.Session();
@@ -8,7 +8,6 @@ define(['postmonger'], function (Postmonger) {
     var currentApiEventKey = null;
     var entrySourceData = [];
     var apiEventKeyMap = {}; // Map to store apiEventKey for each journey
-    var activityId = '{{Activity.Id}}'; // Variable to store Activity Id
 
     $(window).ready(onRender);
     connection.on('initActivity', initialize);
@@ -32,8 +31,6 @@ define(['postmonger'], function (Postmonger) {
             payload = data;
         }
 
-        console.log('Initialize data:', data);
-
         connection.trigger('requestSchema');
         connection.on('requestedSchema', function (data) {
             schema = data['schema'];
@@ -51,21 +48,17 @@ define(['postmonger'], function (Postmonger) {
 
         var selectedJourneyId = null;
         if (inArguments.length > 0) {
-            console.log('In Arguments:', inArguments);
             selectedJourneyId = inArguments[0].selectedJourneyId;
-            console.log('Selected Journey ID from inArguments:', selectedJourneyId);
         }
 
         fetchJourneys(selectedJourneyId);
-
-        // Log Activity Id to the console
-        console.log('Activity Id:', inArguments[0]);
     }
 
     function save() {
         var selectedJourneyId = $('input[name="journey"]:checked').val();
         var selectedApiEventKey = apiEventKeyMap[selectedJourneyId]; // Retrieve the apiEventKey from the map
         var selectedJourneyName = $('input[name="journey"]:checked').closest('label').text().trim();
+        var uniqueId = uuidv4(); // Generate a unique identifier
 
         payload.arguments.execute.inArguments = [
             {
@@ -74,7 +67,7 @@ define(['postmonger'], function (Postmonger) {
                 selectedJourneyAPIEventKey: selectedApiEventKey || null,
                 selectedJourneyName: selectedJourneyName || 'No journey selected',
                 payload: entrySourceData,
-                activityId: activityId // Include Activity Id in the payload
+                uuid: uniqueId // Add the unique identifier to the payload
             }
         ];
 

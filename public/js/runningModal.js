@@ -12,12 +12,37 @@ define(['postmonger'], function (Postmonger) {
 
     function initialize(data) {
         var inArguments = data.arguments.execute.inArguments;
-        var selectedJourneyName = inArguments.find(arg => arg.selectedJourneyName).selectedJourneyName;
-        var activityInstanceId = inArguments.activityInstanceId;
-        console.log(activityInstanceId);
-        var activityInstanceId2 = inArguments.find(arg => arg.activityInstanceId).activityInstanceId;
-        console.log(activityInstanceId2);
+        var uuid = inArguments.find(arg => arg.uuid).uuid;
 
-        $('#selected-journey').text(selectedJourneyName || 'No journey selected');
+        fetch(`/activity/${uuid}`)
+            .then(response => response.json())
+            .then(activityData => {
+                populateTable(activityData);
+            })
+            .catch(error => console.error('Error fetching activity data:', error));
+    }
+
+    function populateTable(activityData) {
+        var tableHtml = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>ContactKey</th>
+                        <th>TriggerDate</th>
+                        <th>Status</th>
+                        <th>Error Log</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${activityData.contactKey}</td>
+                        <td>${new Date(activityData.triggerDate).toLocaleDateString()}</td>
+                        <td>${activityData.status}</td>
+                        <td>${activityData.errorLog || ''}</td>
+                    </tr>
+                </tbody>
+            </table>
+        `;
+        $('#activity-data').html(tableHtml);
     }
 });

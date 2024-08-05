@@ -41,13 +41,25 @@ exports.execute = async function (req, res) {
         const contactKey = inArguments.contactKey;
         const APIEventKey = inArguments.selectedJourneyAPIEventKey;
         const data = inArguments.payload;
+        const uuid = inArguments.uuid;
 
         console.log("Extracted ContactKey:", contactKey);
         console.log("Extracted JourneyId:", APIEventKey);
         console.log("Extracted Data:", data);
 
         const token = await retrieveToken();
-        await triggerJourney(token, contactKey, APIEventKey, data);
+        const response = await triggerJourney(token, contactKey, APIEventKey, data);
+
+        const responsePayload = {
+            uuid: uuid,
+            contactKey: contactKey,
+            triggerDate: new Date(),
+            status: response.status,
+            errorLog: response.error ? response.error.message : null
+        };
+
+        await saveToDatabase(responsePayload);
+
         res.status(200).send('Execute');
     } catch (error) {
         console.error('Error executing journey:', error);
@@ -98,15 +110,16 @@ async function triggerJourney(token, contactKey, APIEventKey, data) {
         Data: data
     };
     try {
-        await axios.post(triggerUrl, eventPayload, {
+        const response = await axios.post(triggerUrl, eventPayload, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
+        return { status: 'Success', error: null };
     } catch (error) {
         console.error('Error triggering journey:', error);
-        throw error;
+        return { status: 'Error', error: error };
     }
 }
 

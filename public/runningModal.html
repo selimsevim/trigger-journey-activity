@@ -22,19 +22,7 @@
 </head>
 <body>
     <h1>Journey Details</h1>
-    <div id="journey-details">
-        <p id="journey-name">Journey: <span></span></p>
-        <p id="journey-id">ID: <span></span></p>
-        <p id="journey-status">Status: <span></span></p>
-        <p id="journey-start-date">Start Date: <span></span></p>
-        <p id="journey-participants">Participants: <span></span></p>
-    </div>
-    <div id="journey-progress">
-        <p>Progress:</p>
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-    </div>
+    <div id="activity-data"></div>
     <style>
         #journey-details p {
             font-size: 1.2em;
@@ -51,6 +39,18 @@
             height: 20px;
             background-color: #4caf50;
             border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        th {
+            background-color: #f3f3f3;
         }
     </style>
 </body>
