@@ -125,4 +125,32 @@ define(['postmonger'], function (Postmonger) {
         journeys.forEach(function (journey) {
             var apiEventKey = apiEventKeyMap[journey.id];
             var $radio = $('<input>', {
-     
+                type: 'radio',
+                name: 'journey',
+                value: journey.id,
+                'data-api-event-key': apiEventKey // Add apiEventKey as a data attribute
+            });
+
+            if (journey.id === selectedJourneyId) {
+                console.log('Pre-selecting journey:', journey.name);
+                $radio.prop('checked', true);
+            }
+
+            $radioGroup.append(
+                $('<label>', {
+                    text: journey.name
+                }).prepend($radio)
+            );
+        });
+    }
+
+    function addEntrySourceAttributesToInArguments(schema) {
+        var data = {};
+        for (var i = 0; i < schema.length; i++) {
+            let attr = schema[i].key;
+            let keyIndex = attr.lastIndexOf('.') + 1;
+            data[attr.substring(keyIndex)] = `{{${attr}}}`;
+        }
+        return data;
+    }
+});
