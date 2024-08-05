@@ -11,16 +11,26 @@ define(['postmonger'], function (Postmonger) {
     }
 
     function initialize(data) {
+        console.log('Initialization Data:', data);
+        
         var inArguments = data.arguments.execute.inArguments;
-        var uuid = inArguments.find(arg => arg.uuid).uuid;
-        console.log(uuid);
+        var uuidArg = inArguments.find(arg => arg.uuid);
+        var uuid = uuidArg ? uuidArg.uuid : null;
 
-        fetch(`/activity/${uuid}`)
-            .then(response => response.json())
-            .then(activityData => {
-                populateTable(activityData);
-            })
-            .catch(error => console.error('Error fetching activity data:', error));
+        console.log('In Arguments:', inArguments);
+        console.log('UUID:', uuid);
+
+        if (uuid) {
+            fetch(`/activity/${uuid}`)
+                .then(response => response.json())
+                .then(activityData => {
+                    console.log('Activity Data:', activityData);
+                    populateTable(activityData);
+                })
+                .catch(error => console.error('Error fetching activity data:', error));
+        } else {
+            console.error('UUID not found in inArguments');
+        }
     }
 
     function populateTable(activityData) {
@@ -36,10 +46,10 @@ define(['postmonger'], function (Postmonger) {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>${activityData.contactKey}</td>
-                        <td>${new Date(activityData.triggerDate).toLocaleDateString()}</td>
+                        <td>${activityData.contact_key}</td>
+                        <td>${new Date(activityData.trigger_date).toLocaleDateString()}</td>
                         <td>${activityData.status}</td>
-                        <td>${activityData.errorLog || ''}</td>
+                        <td>${activityData.error_log || ''}</td>
                     </tr>
                 </tbody>
             </table>
