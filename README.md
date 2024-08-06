@@ -11,8 +11,6 @@ Journey Trigger is a custom Salesforce Marketing Cloud Journey Builder Activity 
 
 ![Screenshot](/app_images/4.png)
 
-![Screenshot](/app_images/1.png)
-
 ![Screenshot](/app_images/2.png)
 
 ![Screenshot](/app_images/3.png)
