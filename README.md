@@ -1,17 +1,10 @@
 # JourneyTrigger - What is it?
 
-Journey Trigger is a custom Salesforce Marketing Cloud Journey Builder Activity designed to trigger one journey from another. With a unique identifier mechanism and robust logging capabilities, this activity ensures seamless journey integrations and detailed tracking.
+Journey Trigger is a custom Salesforce Marketing Cloud Journey Builder Activity designed to trigger one journey from another with the Journey Data of the current journey. With a unique identifier mechanism and robust logging capabilities, this activity ensures seamless journey integrations and detailed tracking.
 
 ## Key Features
 
 - **Retrieving Journeys**: Automatically retrieves journeys for your selection based on their entry source if it is APIEvent.
-- **Persistence**: The activity remembers your selection in current and new versions.
-- **Journey Integration**: Allows triggering of specified journeys based on API event keys.
-- **Detailed Logging**: Logs the results of triggering journeys and shows it after the journey runs.
-
-## Potential Use Cases
-
-1- Payload of the trigger: This activity uses the Journey Data of the journey that uses the activity. Hence, if the journey you want to trigger has additional non-nullable or required fields, this will not work.
 - **Persistence**: The activity remembers your selection in current and new versions.
 - **Journey Integration**: Allows triggering of specified journeys based on API event keys.
 - **Detailed Logging**: Logs the results of triggering journeys and shows it after the journey runs.
@@ -21,6 +14,12 @@ Journey Trigger is a custom Salesforce Marketing Cloud Journey Builder Activity 
 1-Journey Data Dependency: This activity uses the Journey Data of the journey that incorporates the activity. Therefore, if the journey you intend to trigger has additional non-nullable or required fields, this activity will not function properly.
 2-Entry Source Requirement: The entry source must be set before using the activity because the activity retrieves Journey Data from the entry source when it is saved.
 3-Experimental Project Disclaimer: This project was created for fun rather than as a stable solution for large-scale Business Units. If you have 1,000 journeys and plan to use this trigger activity for a journey that sends to 1 million contacts, you will need to modify the log-showing part to prevent it from creating a huge mess.
+
+## Potential Use Case
+
+This activity can be used for projects where a complete customer journey cannot be created due to many phases or elements. By dividing that "whole" journey into more maintainable "little" journeys, if the criterion for subsequent journeys is simply "the contact must enter this after leaving the first or second journey," this activity simplifies and streamlines the process. Normally, you would need additional configuration to inject contacts into those journeys, but with this activity, it is simple and straightforward.
+
+## Images
 
 ![Screenshot](/app_images/4.png)
 
