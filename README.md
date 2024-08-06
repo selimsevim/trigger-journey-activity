@@ -21,12 +21,14 @@ Journey Trigger is a custom Salesforce Marketing Cloud Journey Builder Activity 
 
 ## Getting Started
 
-This application is developed for Heroku-hosted deployments, complementing Salesforce Marketing Cloud (SFMC) integration.
+This activity is developed for Heroku-hosted deployments, complementing Salesforce Marketing Cloud (SFMC) integration. Postgre SQL has been used in addition to Node.
 
 ### Salesforce Marketing Cloud Setup
 
 1. Create a Web App package with "Write" permissions under the "Data Extensions" section in SFMC.
 2. Set the redirect URI to `https://yourherokudomain.herokuapp.com`.
+   
+![Screenshot](/app_images/7.png)
 
 For SFMC UI integration:
 
