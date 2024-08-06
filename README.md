@@ -15,7 +15,7 @@ Journey Trigger is a custom Salesforce Marketing Cloud Journey Builder Activity 
 
 2. **Entry Source Requirement**: The entry source must be set before using the activity because the activity retrieves Journey Data from the entry source when it is saved.
 
-3. **Experimental Project Disclaimer**: This project was created for fun rather than as a stable solution for large-scale Business Units. If you have 1,000 journeys and plan to use this trigger activity for a journey that sends to 1 million contacts, you will need to modify the log-showing part to prevent it from creating a huge mess.
+3. **Experimental Project Disclaimer**: This project was created for fun rather than as a stable solution for large-scale Business Units. If you have 1,000 journeys and plan to use this trigger activity for a journey that sends to 1 million contacts, you will need to modify the code a bit to not pay a huge bill for Heroku or having the longest log table in history.
 
 
 ## Potential Use Case
