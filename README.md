@@ -1,52 +1,60 @@
-# SFMC released a updated and official version of a Custom Activity Template
-[This would be better than mine](https://github.com/salesforce-marketingcloud/sfmc-example-jb-custom-activity)
+# JourneyTrigger - What is it?
 
+Journey Trigger is a custom Salesforce Marketing Cloud Journey Builder Activity designed to trigger one journey from another. With a unique identifier mechanism and robust logging capabilities, this activity ensures seamless journey integrations and detailed tracking.
 
-# Marketing Cloud Journey Builder Custom Activity Template
-> This template for Marketing Cloud Journey Builder Custom Activity. It is hosted on Heroku and running on NodeJS
+## Key Features
 
+- **Retrieving Journeys**: Automatically retrieves journeys for your selection based on their entry source if it is APIEvent.
+- **Persistence**: The activity remembers your selection in current and new versions.
+- **Journey Integration**: Allows triggering of specified journeys based on API event keys.
+- **Detailed Logging**: Logs the results of triggering journeys and shows it after the journey runs.
 
-This application is to be hosted on Heroku with specific credentials set up in the environment variables for it to be linked with Marketing Cloud.
-The application has a function that authenticates according the enhanced package Oauth2.
+![Screenshot](/app_images/1.png)
 
+![Screenshot](/app_images/2.png)
 
-## Usage example
+![Screenshot](/app_images/3.png)
 
-Drag and drop it into the Journey Builder Canvas. Set up the application if necessary through the UI.
+![Screenshot](/app_images/4.png)
 
-## Application Setup
+![Screenshot](/app_images/5.png)
 
-After uploading into Heroku and allowing the HTTPS to be set up, fill in the application URL within `config.json`
+![Screenshot](/app_images/6.png)
 
-Necessary steps thats required to set up the application.
+## Getting Started
 
-1. Create an package within Marketing Cloud.
-2. Add the API integration component making sure it's a Server - Server integration.
-3. Add the Journey Builder Activity component.
-4. Grab the `unique key` from the journey builder activity and place it within `config.json`.
-5. Grab the client ID, client secret, JWT Signing Secret and place it within Heroku as a env variables.
-    - `jwtSecret`
-    - `clientId`
-    - `clientSecret`
-6. Grab the Authentication Base URI and place it within the environment variable in Heroku.
-    - `authenticationUrl`
-7. Grab the HTTPS URL that is created by Heroku and place it within config.json replacing `<HTTPS_URL_OF_APP>`.
+This application is developed for Heroku-hosted deployments, complementing Salesforce Marketing Cloud (SFMC) integration.
 
-## Release History
+### Salesforce Marketing Cloud Setup
 
-* 1.0.0
-    * Initial Push with overall working template
-* 1.0.1
-    * Updated package json
+1. Create a Web App package with "Write" permissions under the "Data Extensions" section in SFMC.
+2. Set the redirect URI to `https://yourherokudomain.herokuapp.com`.
 
-## Meta
+For SFMC UI integration:
 
-Theon Thai Yun Tang – [Portfolio](https://www.theonthai.com/) – theonthai@gmail.com
+- Configure the "Login Endpoint" to `https://yourherokudomain.herokuapp.com/initiate-authorization/`.
+- The "Logout Endpoint" can point to `https://yourherokudomain.herokuapp.com/log-out/`, though this URL is placeholder and should be customized as needed.
 
-## Contributing
+![Screenshot](/instruction_images/sfmc.jpg)
 
-1. Fork it (<https://github.com/theonthai45/SFMC-custom-activity-template/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
+### Heroku Configuration
+
+After deploying the app via a GitHub repository:
+
+- Define the necessary configuration variables within Heroku's settings to match the SFMC package details.
+
+![Screenshot](/instruction_images/heroku.png)
+
+With these configurations, the app is ready for use.
+
+## License
+
+JourneyTrigger is open-sourced under the MIT License. See the LICENSE file for more details.
+
+## Thanks
+
+I used the template that Theon Thai Yun Tang created, which can be found here:
+
+https://github.com/theonthai45/SFMC-custom-activity-template
+
+---
