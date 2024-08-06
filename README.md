@@ -9,13 +9,13 @@ Journey Trigger is a custom Salesforce Marketing Cloud Journey Builder Activity 
 - **Journey Integration**: Allows triggering of specified journeys based on API event keys.
 - **Detailed Logging**: Logs the results of triggering journeys and shows it after the journey runs.
 
+![Screenshot](/app_images/4.png)
+
 ![Screenshot](/app_images/1.png)
 
 ![Screenshot](/app_images/2.png)
 
 ![Screenshot](/app_images/3.png)
-
-![Screenshot](/app_images/4.png)
 
 ![Screenshot](/app_images/5.png)
 
