@@ -66,7 +66,7 @@ JourneyTrigger is open-sourced under the MIT License. See the LICENSE file for m
 
 ## Thanks
 
-I used the template that Theon Thai Yun Tang created, which can be found here:
+I would like to say thanks to Theon Thai Yun Tang because I used the template that he created, which can be found here:
 
 https://github.com/theonthai45/SFMC-custom-activity-template
 
