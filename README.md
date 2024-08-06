@@ -25,25 +25,26 @@ This activity is developed for Heroku-hosted deployments, complementing Salesfor
 
 ### Salesforce Marketing Cloud Setup
 
-1. Create a Web App package with "Write" permissions under the "Data Extensions" section in SFMC.
-2. Set the redirect URI to `https://yourherokudomain.herokuapp.com`.
+1. Create a Journey Builder Activity package along with Server-to-Server API Integration package that has the correct permissions for Journey data. 
+2. Set the endpoint URL to `https://yourherokudomain.herokuapp.com`.
    
 ![Screenshot](/app_images/7.png)
 
-For SFMC UI integration:
-
-- Configure the "Login Endpoint" to `https://yourherokudomain.herokuapp.com/initiate-authorization/`.
-- The "Logout Endpoint" can point to `https://yourherokudomain.herokuapp.com/log-out/`, though this URL is placeholder and should be customized as needed.
-
-![Screenshot](/instruction_images/sfmc.jpg)
+This will automatically add Journey Activity into your Journey Builder UI.
 
 ### Heroku Configuration
+
+First, you would need Heroku Postgres add-ons to handle database. This can be added on Overview. When you add the add-on, it automatically creates the necessary DATABASE_URL variable.
+
+![Screenshot](/app_images/8.png)
+
+![Screenshot](/app_images/9.png)
 
 After deploying the app via a GitHub repository:
 
 - Define the necessary configuration variables within Heroku's settings to match the SFMC package details.
 
-![Screenshot](/instruction_images/heroku.png)
+![Screenshot](/app_images/10.png)
 
 With these configurations, the app is ready for use.
 
